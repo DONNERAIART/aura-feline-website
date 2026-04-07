@@ -279,7 +279,7 @@
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Rubin</span>
                 </div>
                 <!-- Topas -->
-                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(88)">
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(100)">
                     <div id="swatch-3" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Topas</span>
                 </div>
@@ -307,7 +307,7 @@
                 transform: scale(1.25);
             }
             #color-slider {
-                background: linear-gradient(to right, #111 0%, #3d9970 12%, #2b6ce8 37%, #c0392b 62%, #c8860a 88%, #222 100%) !important;
+                background: linear-gradient(to right, #111 0%, #3d9970 12%, #2b6ce8 37%, #c0392b 62%, #c8860a 100%) !important;
                 border: none !important;
                 height: 8px;
             }
@@ -331,7 +331,7 @@
                     document.getElementById('swatch-3'),
                 ];
                 // Positions matching the actual video color segments
-                const positions = [0, 12, 37, 62, 88];
+                const positions = [0, 12, 37, 62, 100];
                 let closest = 0;
                 let minDist = Math.abs(v - positions[0]);
                 for (let i = 1; i < positions.length; i++) {
