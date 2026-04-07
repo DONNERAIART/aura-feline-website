@@ -260,27 +260,27 @@
             <div class="flex justify-between items-end mb-6 px-1">
                 <!-- Off -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(0)">
-                    <div id="swatch-off" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #222;"></div>
+                    <div id="swatch-off" class="w-7 h-7 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #e2e8f0;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Off</span>
                 </div>
                 <!-- Smaragd -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(12)">
-                    <div id="swatch-0" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #3d9970;"></div>
+                    <div id="swatch-0" class="w-7 h-7 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #a8d5ba;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Smaragd</span>
                 </div>
                 <!-- Saphir -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(37)">
-                    <div id="swatch-1" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #2b6ce8;"></div>
+                    <div id="swatch-1" class="w-7 h-7 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #abc9e9;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Saphir</span>
                 </div>
                 <!-- Rubin -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(62)">
-                    <div id="swatch-2" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c0392b;"></div>
+                    <div id="swatch-2" class="w-7 h-7 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #f1a1a1;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Rubin</span>
                 </div>
                 <!-- Topas -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(100)">
-                    <div id="swatch-topas" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
+                    <div id="swatch-topas" class="w-7 h-7 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #f3d8a2;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Topas</span>
                 </div>
             </div>
@@ -305,6 +305,11 @@
             }
             input[type=range].slider-thumb-premium::-webkit-slider-thumb:hover {
                 transform: scale(1.25);
+            }
+            #color-slider {
+                background: linear-gradient(to right, #e2e8f0 0%, #a8d5ba 12%, #abc9e9 37%, #f1a1a1 62%, #f3d8a2 100%) !important;
+                border: none !important;
+                height: 8px;
             }
             </style>
             <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none rounded-full outline-none slider-thumb-premium transition-all" />
