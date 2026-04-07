@@ -467,14 +467,13 @@
     // The continuous loop to smoothly interpolate the video time
     function renderVideoScroll() {
         if (scrollContainer && scrollVideo && scrollVideo.readyState >= 1) {
-            // Sehr weicher Lerp-Faktor für ultimative Glätte
-            smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.04;
+            // Etwas sanfterer Lerp-Faktor für mehr Puffer
+            smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.035;
             
             const targetTime = smoothScrollProgress * scrollVideo.duration;
             if(!Number.isNaN(targetTime)) {
-                // Verhindert Decoder-Stottern: Setze die Zeit nur neu, wenn der Browser mit dem letzten Frame fertig ist
-                // und die Änderung mindestens ~30ms beträgt.
-                if (!isVideoSeeking && Math.abs(scrollVideo.currentTime - targetTime) > 0.03) {
+                // Präzisere Prüfung der Zeitdifferenz, um Decoder-Last zu verteilen
+                if (!isVideoSeeking && Math.abs(scrollVideo.currentTime - targetTime) > 0.04) {
                     isVideoSeeking = true;
                     scrollVideo.currentTime = targetTime;
                 }
@@ -784,14 +783,13 @@
         function renderColorScrubbing() {
             let duration = colorVideo.duration;
             if (colorVideo && !isNaN(duration) && isFinite(duration)) {
-                // Glatte Annäherung an den Zielwert (Lerp)
-                smoothColorProgress += (targetColorProgress - smoothColorProgress) * 0.08;
+                // Etwas elastischerer Faktor für das Farbrad
+                smoothColorProgress += (targetColorProgress - smoothColorProgress) * 0.065;
 
-                // Berechne die Zielzeit basierend auf dem 2.43s Start-Offset
                 const targetTime = colorStartTime + smoothColorProgress * (duration - colorStartTime);
 
-                // Nur updaten, wenn der Browser bereit ist und die Zeitdifferenz spürbar ist
-                if (!isColorVideoSeeking && Math.abs(colorVideo.currentTime - targetTime) > 0.02) {
+                // Erhöhter Puffer (0.04) um Stottern bei niedriger Bitrate zu vermeiden
+                if (!isColorVideoSeeking && Math.abs(colorVideo.currentTime - targetTime) > 0.04) {
                     isColorVideoSeeking = true;
                     colorVideo.currentTime = targetTime;
                 }
