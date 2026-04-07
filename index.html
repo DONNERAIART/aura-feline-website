@@ -256,78 +256,100 @@
         </div>
         
         <div class="max-w-2xl mx-auto w-full relative bg-surface-container p-6 md:p-8 rounded-3xl border border-black/5 shadow-xl">
-            <!-- Color Swatches -->
-            <div class="flex justify-between items-center mb-5 px-1">
-                <div class="flex items-center gap-3 group cursor-pointer" onclick="document.getElementById('color-slider').value=0; document.getElementById('color-slider').dispatchEvent(new Event('input'));">
-                    <div id="swatch-left" class="w-9 h-9 rounded-full border-[3px] border-transparent ring-2 ring-offset-2 ring-offset-surface-container ring-tertiary transition-all duration-300 shadow-md" style="background: #c8b89a;"></div>
-                    <span class="text-xs text-on-surface-variant font-medium">Sandstone</span>
+            <!-- 4 Color Swatches -->
+            <div class="flex justify-between items-end mb-6 px-1">
+                <!-- Grün -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(0)">
+                    <div id="swatch-0" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-tertiary group-hover:scale-110" style="background: #3d9970;"></div>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Grün</span>
                 </div>
-                <div id="slider-color-label" class="text-xs font-bold text-tertiary uppercase tracking-widest opacity-60 transition-opacity">◀ ziehe ▶</div>
-                <div class="flex items-center gap-3 group cursor-pointer flex-row-reverse" onclick="document.getElementById('color-slider').value=100; document.getElementById('color-slider').dispatchEvent(new Event('input'));">
-                    <div id="swatch-right" class="w-9 h-9 rounded-full border-[3px] border-transparent ring-2 ring-offset-2 ring-offset-surface-container ring-transparent transition-all duration-300 shadow-md" style="background: #5c4a3a;"></div>
-                    <span class="text-xs text-on-surface-variant font-medium">Espresso</span>
+                <!-- Blau -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(33)">
+                    <div id="swatch-1" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #2b6ce8;"></div>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Blau</span>
+                </div>
+                <!-- Rot -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(66)">
+                    <div id="swatch-2" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c0392b;"></div>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Rot</span>
+                </div>
+                <!-- Gold -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(100)">
+                    <div id="swatch-3" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Gold</span>
                 </div>
             </div>
             <style>
             input[type=range].slider-thumb-premium::-webkit-slider-thumb {
               -webkit-appearance: none;
               appearance: none;
-              width: 32px;
-              height: 32px;
+              width: 28px;
+              height: 28px;
               border-radius: 50%;
-              background: linear-gradient(135deg, #c8b89a, #5c4a3a);
-              box-shadow: 0 0 20px rgba(175, 155, 109, 0.6);
+              background: white;
+              border: 3px solid #af9b6d;
+              box-shadow: 0 2px 12px rgba(0,0,0,0.2);
               cursor: pointer;
-              transition: transform 0.2s;
+              transition: transform 0.2s, border-color 0.3s;
             }
             @media (min-width: 768px) {
                 input[type=range].slider-thumb-premium::-webkit-slider-thumb {
-                    width: 24px;
-                    height: 24px;
+                    width: 22px;
+                    height: 22px;
                 }
             }
             input[type=range].slider-thumb-premium::-webkit-slider-thumb:hover {
-                transform: scale(1.3);
+                transform: scale(1.25);
             }
             #color-slider {
-                background: linear-gradient(to right, #c8b89a, #5c4a3a) !important;
+                background: linear-gradient(to right, #3d9970 0%, #2b6ce8 33%, #c0392b 66%, #c8860a 100%) !important;
                 border: none !important;
+                height: 8px;
             }
             </style>
-            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none h-2 rounded-full outline-none slider-thumb-premium transition-all" />
+            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none rounded-full outline-none slider-thumb-premium transition-all" />
             <script>
+            function setSliderTo(val) {
+                const slider = document.getElementById('color-slider');
+                if (!slider) return;
+                slider.value = val;
+                slider.dispatchEvent(new Event('input'));
+                updateSwatches4(val);
+            }
+            function updateSwatches4(val) {
+                const v = parseInt(val);
+                const swatches = [
+                    document.getElementById('swatch-0'),
+                    document.getElementById('swatch-1'),
+                    document.getElementById('swatch-2'),
+                    document.getElementById('swatch-3'),
+                ];
+                // Determine which swatch is closest
+                const positions = [0, 33, 66, 100];
+                let closest = 0;
+                let minDist = Math.abs(v - positions[0]);
+                for (let i = 1; i < positions.length; i++) {
+                    const d = Math.abs(v - positions[i]);
+                    if (d < minDist) { minDist = d; closest = i; }
+                }
+                swatches.forEach((s, i) => {
+                    if (!s) return;
+                    if (i === closest) {
+                        s.classList.add('ring-tertiary');
+                        s.classList.remove('ring-transparent');
+                        s.style.transform = 'scale(1.15)';
+                    } else {
+                        s.classList.remove('ring-tertiary');
+                        s.classList.add('ring-transparent');
+                        s.style.transform = '';
+                    }
+                });
+            }
             (function() {
                 const slider = document.getElementById('color-slider');
-                const swatchLeft = document.getElementById('swatch-left');
-                const swatchRight = document.getElementById('swatch-right');
-                function updateSwatches(val) {
-                    const v = parseInt(val);
-                    if (v < 30) {
-                        swatchLeft.style.borderColor = '#af9b6d';
-                        swatchLeft.classList.add('ring-tertiary');
-                        swatchLeft.classList.remove('ring-transparent');
-                        swatchRight.style.borderColor = 'transparent';
-                        swatchRight.classList.remove('ring-tertiary');
-                        swatchRight.classList.add('ring-transparent');
-                    } else if (v > 70) {
-                        swatchRight.style.borderColor = '#af9b6d';
-                        swatchRight.classList.add('ring-tertiary');
-                        swatchRight.classList.remove('ring-transparent');
-                        swatchLeft.style.borderColor = 'transparent';
-                        swatchLeft.classList.remove('ring-tertiary');
-                        swatchLeft.classList.add('ring-transparent');
-                    } else {
-                        swatchLeft.style.borderColor = 'transparent';
-                        swatchLeft.classList.remove('ring-tertiary');
-                        swatchLeft.classList.add('ring-transparent');
-                        swatchRight.style.borderColor = 'transparent';
-                        swatchRight.classList.remove('ring-tertiary');
-                        swatchRight.classList.add('ring-transparent');
-                    }
-                }
                 if (slider) {
-                    slider.addEventListener('input', function() { updateSwatches(this.value); });
-                    updateSwatches(slider.value);
+                    slider.addEventListener('input', function() { updateSwatches4(this.value); });
+                    updateSwatches4(slider.value);
                 }
             })();
             </script>
