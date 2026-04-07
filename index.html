@@ -258,25 +258,25 @@
         <div class="max-w-2xl mx-auto w-full relative bg-surface-container p-6 md:p-8 rounded-3xl border border-black/5 shadow-xl">
             <!-- 4 Color Swatches -->
             <div class="flex justify-between items-end mb-6 px-1">
-                <!-- Grün -->
-                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(0)">
-                    <div id="swatch-0" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-tertiary group-hover:scale-110" style="background: #3d9970;"></div>
-                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Grün</span>
+                <!-- Smaragd -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(12)">
+                    <div id="swatch-0" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #3d9970;"></div>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Smaragd</span>
                 </div>
-                <!-- Blau -->
-                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(33)">
+                <!-- Saphir -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(37)">
                     <div id="swatch-1" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #2b6ce8;"></div>
-                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Blau</span>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Saphir</span>
                 </div>
-                <!-- Rot -->
-                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(66)">
+                <!-- Rubin -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(62)">
                     <div id="swatch-2" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c0392b;"></div>
-                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Rot</span>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Rubin</span>
                 </div>
-                <!-- Gold -->
-                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(100)">
+                <!-- Topas -->
+                <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(88)">
                     <div id="swatch-3" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
-                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Gold</span>
+                    <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Topas</span>
                 </div>
             </div>
             <style>
@@ -302,12 +302,12 @@
                 transform: scale(1.25);
             }
             #color-slider {
-                background: linear-gradient(to right, #3d9970 0%, #2b6ce8 33%, #c0392b 66%, #c8860a 100%) !important;
+                background: linear-gradient(to right, #222 0%, #3d9970 12%, #2b6ce8 37%, #c0392b 62%, #c8860a 88%, #222 100%) !important;
                 border: none !important;
                 height: 8px;
             }
             </style>
-            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none rounded-full outline-none slider-thumb-premium transition-all" />
+            <input type="range" id="color-slider" min="0" max="100" value="12" class="w-full cursor-pointer appearance-none rounded-full outline-none slider-thumb-premium transition-all" />
             <script>
             function setSliderTo(val) {
                 const slider = document.getElementById('color-slider');
@@ -324,8 +324,8 @@
                     document.getElementById('swatch-2'),
                     document.getElementById('swatch-3'),
                 ];
-                // Determine which swatch is closest
-                const positions = [0, 33, 66, 100];
+                // Positions matching the actual video color segments
+                const positions = [12, 37, 62, 88];
                 let closest = 0;
                 let minDist = Math.abs(v - positions[0]);
                 for (let i = 1; i < positions.length; i++) {
