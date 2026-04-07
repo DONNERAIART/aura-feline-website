@@ -126,11 +126,11 @@
 
 <!-- Header with Cart Icon -->
 <header class="fixed top-6 md:top-8 left-6 md:left-12 z-[60] pointer-events-none">
-    <a href="index.html" class="font-headline italic text-xl md:text-2xl text-tertiary glint-text pointer-events-auto hover:scale-105 transition-transform">Aura Feline</a>
+    <a href="index.html" class="font-headline italic text-xl md:text-2xl text-tertiary glint-text pointer-events-auto px-6 py-3 rounded-full border border-tertiary/30 bg-white/5 backdrop-blur-md hover:scale-105 hover:border-tertiary/60 transition-all shadow-lg">Aura Feline</a>
 </header>
 <!-- Cart Button (separate from logo to keep logo pinned left) -->
 <div class="fixed top-8 md:top-10 right-6 md:right-12 z-[60] pointer-events-none">
-    <button onclick="toggleCart()" class="pointer-events-auto w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-xl border border-black/5 flex items-center justify-center text-on-background hover:text-tertiary hover:scale-105 transition-all shadow-lg relative group">
+    <button onclick="toggleCart()" class="pointer-events-auto w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-xl border border-tertiary/30 flex items-center justify-center text-on-background hover:text-tertiary hover:scale-105 transition-all shadow-lg relative group">
         <span class="material-symbols-outlined text-xl md:text-2xl group-hover:-translate-y-1 transition-transform">shopping_bag</span>
         <span id="cart-count" class="absolute -top-1 -right-1 bg-tertiary text-white text-[10px] md:text-xs font-bold w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center shadow-lg">0</span>
     </button>
