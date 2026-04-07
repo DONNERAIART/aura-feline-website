@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="de"><head>
+<html lang="de"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -10,12 +10,12 @@
         theme: {
             extend: {
                 colors: {
-                    "background": "#0f1113",
-                    "surface": "#16191c",
-                    "surface-container-low": "#121417",
-                    "tertiary": "#c5b37e",
-                    "on-background": "#f1f5f9",
-                    "on-surface-variant": "#94a3b8",
+                    "background": "#fdfbf7",
+                    "surface": "#ffffff",
+                    "surface-container-low": "#fcfaf7",
+                    "tertiary": "#af9b6d",
+                    "on-background": "#2c2924",
+                    "on-surface-variant": "#6e6a61",
                 },
                 fontFamily: {
                     "headline": ["Noto Serif"],
@@ -26,13 +26,13 @@
     }
 </script>
 <style type="text/tailwindcss">
-    .glint-text { text-shadow: 0 0 1px rgba(197, 179, 126, 0.8), 0 0 15px rgba(197, 179, 126, 0.2); }
+    .glint-text { text-shadow: 0 0 1px rgba(175, 155, 109, 0.4), 0 0 15px rgba(175, 155, 109, 0.1); }
     body { @apply bg-background text-on-background antialiased; }
 </style>
 </head>
 <body class="font-body selection:bg-tertiary/30">
 
-<header class="fixed top-0 left-0 right-0 p-6 z-[60] flex justify-between items-center bg-background/80 backdrop-blur-md border-b border-white/5">
+<header class="fixed top-0 left-0 right-0 p-6 z-[60] flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-black/5">
     <a href="index.html" class="font-headline italic text-2xl text-tertiary glint-text hover:scale-105 transition-transform">Aura Feline</a>
 </header>
 

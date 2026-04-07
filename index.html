@@ -13,21 +13,21 @@
             theme: {
                 extend: {
                     colors: {
-                        "background": "#0f1113",
-                        "surface": "#16191c",
-                        "surface-container": "#1e2226",
-                        "surface-container-high": "#282d33",
-                        "surface-container-highest": "#333940",
-                        "surface-container-low": "#121417",
-                        "surface-container-lowest": "#0b0c0e",
-                        "primary": "#374151",
-                        "primary-dim": "#1f2937",
-                        "on-primary": "#f8fafc",
-                        "secondary": "#4b5563",
-                        "tertiary": "#c5b37e",
-                        "on-background": "#f1f5f9",
-                        "on-surface-variant": "#94a3b8",
-                        "outline-variant": "#334155",
+                        "background": "#fdfbf7",
+                        "surface": "#ffffff",
+                        "surface-container": "#f8f5f0",
+                        "surface-container-low": "#fcfaf7",
+                        "surface-container-high": "#f0ede6",
+                        "surface-container-highest": "#e8e4db",
+                        "primary": "#d4c391",
+                        "primary-dim": "#c5b37e",
+                        "on-primary": "#ffffff",
+                        "secondary": "#efebdf",
+                        "tertiary": "#af9b6d",
+                        "on-background": "#2c2924",
+                        "on-surface-variant": "#6e6a61",
+                        "outline": "#d8d3c9",
+                        "outline-variant": "#e8e4db",
                     },
                     fontFamily: {
                         "headline": ["Noto Serif"],
@@ -59,52 +59,33 @@
             50% { transform: translateY(-15px); }
         }
         @keyframes glow-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(197, 179, 126, 0.1); }
-            50% { box-shadow: 0 0 40px rgba(197, 179, 126, 0.3); }
+            0%, 100% { box-shadow: 0 0 20px rgba(175, 155, 109, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(175, 155, 109, 0.3); }
         }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-        body {
-            @apply bg-background text-on-background antialiased;
-            position: relative;
-            overflow-x: hidden;
-        }
+        body { @apply bg-background text-on-background antialiased overflow-x-hidden selection:bg-primary/20; }
         .mycelium-bg {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
+            @apply fixed inset-0 z-0 pointer-events-none opacity-[0.03];
+            background-image: radial-gradient(circle at 2px 2px, #af9b6d 1px, transparent 0);
+            background-size: 40px 40px;
         }
         .particle {
-            position: absolute;
-            background: theme('colors.tertiary');
-            border-radius: 50%;
+            @apply absolute bg-tertiary/20 rounded-full pointer-events-none;
             filter: blur(1px);
-            opacity: 0.3;
-            animation: float-particle 15s infinite ease-in-out;
+            animation: float-particle linear infinite;
         }
         .aura-bg {
-            position: fixed;
-            width: 150vw;
-            height: 150vh;
-            top: -25vh;
-            left: -25vw;
-            background: radial-gradient(circle at center, rgba(197, 179, 126, 0.12) 0%, transparent 70%);
+            @apply fixed inset-0 z-0 pointer-events-none;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 195, 145, 0.15) 0%, transparent 70%);
             filter: blur(100px);
-            z-index: 0;
-            pointer-events: none;
             animation: aura-shift 25s ease-in-out infinite;
             will-change: transform;
         }
-        .glint-text {
-            text-shadow: 0 0 1px rgba(197, 179, 126, 0.8), 0 0 15px rgba(197, 179, 126, 0.2);
-            position: relative;
-        }
-        .glint-outline {
-            -webkit-text-stroke: 0.5px rgba(197, 179, 126, 0.3);
-        }
+        .glint-text { text-shadow: 0 0 1px rgba(175, 155, 109, 0.4), 0 0 15px rgba(175, 155, 109, 0.1); }
+        .glint-outline { -webkit-text-stroke: 1px rgba(175, 155, 109, 0.2); }
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(40px);
@@ -134,7 +115,7 @@
         }
         .hover-lift:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         .magnetic-btn {
             transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -146,28 +127,28 @@
 <!-- Header with Cart Icon -->
 <header class="fixed top-2 md:top-4 left-0 right-0 px-4 md:px-8 z-[60] flex justify-between items-start pointer-events-none">
     <a href="index.html" class="font-headline italic text-xl md:text-2xl text-tertiary glint-text pointer-events-auto mt-6 md:mt-8 hover:scale-105 transition-transform">Aura Feline</a>
-    <button onclick="toggleCart()" class="pointer-events-auto mt-8 md:mt-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface-container-highest/80 backdrop-blur-xl border border-white/10 flex items-center justify-center text-on-background hover:text-tertiary hover:scale-105 transition-all shadow-xl relative group">
+    <button onclick="toggleCart()" class="pointer-events-auto mt-8 md:mt-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-xl border border-black/5 flex items-center justify-center text-on-background hover:text-tertiary hover:scale-105 transition-all shadow-lg relative group">
         <span class="material-symbols-outlined text-xl md:text-2xl group-hover:-translate-y-1 transition-transform">shopping_bag</span>
-        <span id="cart-count" class="absolute -top-1 -right-1 bg-tertiary text-background text-[10px] md:text-xs font-bold w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center shadow-lg">0</span>
+        <span id="cart-count" class="absolute -top-1 -right-1 bg-tertiary text-white text-[10px] md:text-xs font-bold w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center shadow-lg">0</span>
     </button>
 </header>
 
 <!-- Shopping Cart Drawer -->
-<div id="cart-overlay" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[70] opacity-0 pointer-events-none transition-opacity duration-500" onclick="toggleCart()"></div>
-<div id="cart-drawer" class="fixed top-0 right-0 w-[92%] sm:w-full sm:max-w-md h-full bg-surface-container-low border-l border-white/10 z-[80] translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)]">
-    <div class="p-6 border-b border-white/5 flex justify-between items-center">
+<div id="cart-overlay" class="fixed inset-0 bg-background/60 backdrop-blur-sm z-[70] opacity-0 pointer-events-none transition-opacity duration-500" onclick="toggleCart()"></div>
+<div id="cart-drawer" class="fixed top-0 right-0 w-[92%] sm:w-full sm:max-w-md h-full bg-white border-l border-black/5 z-[80] translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
+    <div class="p-6 border-b border-black/5 flex justify-between items-center">
         <h2 class="text-2xl font-headline italic glint-text">Warenkorb</h2>
-        <button onclick="toggleCart()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors">
+        <button onclick="toggleCart()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors">
             <span class="material-symbols-outlined">close</span>
         </button>
     </div>
     
-    <div id="cart-items" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-surface-container-low">
         <!-- Items will be injected here -->
         <p class="text-on-surface-variant/50 text-center mt-10">Dein Warenkorb ist leer.</p>
     </div>
     
-    <div class="p-6 border-t border-white/5 bg-surface mt-auto">
+    <div class="p-6 border-t border-black/5 bg-white mt-auto">
         <div class="flex justify-between items-center mb-6">
             <span class="text-on-surface-variant text-lg">Gesamtsumme</span>
             <span class="text-2xl font-bold text-tertiary" id="cart-total">0 €</span>
@@ -183,13 +164,12 @@
 <!-- Scroll Video Header -->
 <div id="video-scroll-container" class="relative w-full h-[400vh]">
     <div class="sticky top-0 w-full h-screen overflow-hidden bg-background">
-        <video id="hero-scroll-video" src="shroom.mp4" muted playsinline preload="auto" tabindex="-1" class="w-full h-full object-cover opacity-80 mix-blend-lighten"></video>
-        <!-- Dunkle Verläufe (Vignetten) an den Rändern, um das Video sanft in die Seite einzubauen -->
-        <div class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10"></div>
-        <div class="absolute inset-0 bg-background/10 pointer-events-none z-0"></div>
+        <video id="hero-scroll-video" src="shroom.mp4" muted playsinline preload="auto" tabindex="-1" class="w-full h-full object-cover opacity-90 transition-opacity duration-1000"></video>
+        <div class="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none z-10"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-10"></div>
+        <div id="video-vignette-sides" class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background opacity-40 pointer-events-none z-10"></div>
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none pb-[15vh]">
-             <span id="scroll-prompt" class="text-tertiary/70 font-body uppercase tracking-[0.3em] text-xs animate-bounce opacity-0 transition-opacity duration-1000 text-center glint-text">Scroll Down <br><span class="material-symbols-outlined mt-2">arrow_downward</span></span>
+             <span id="scroll-prompt" class="text-tertiary/70 font-body uppercase tracking-[0.3em] text-xs animate-bounce opacity-0 transition-opacity duration-1000 text-center glint-text">Scroll Down <br><span class="material-symbols-outlined mt-2 text-tertiary">arrow_downward</span></span>
         </div>
 
         <!-- Hero Overlay (appears at the end) -->
@@ -202,17 +182,17 @@
                 Entdecken Sie die Myzelia-Serie. Organische Katzenstufen in Pilzform, inspiriert von der Eleganz des Waldes und gefertigt mit modernster Präzision.
             </p>
             <div class="flex flex-wrap items-center gap-4 md:gap-6">
-                <button onclick="document.getElementById('collection-section').scrollIntoView({behavior: 'smooth'})" class="magnetic-btn px-8 md:px-10 py-4 md:py-5 bg-primary text-on-primary rounded-full font-bold text-base md:text-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(197,179,126,0.3)] hover:scale-105 hover:bg-primary-dim transition-all duration-500 pointer-events-auto">
+                <button onclick="document.getElementById('collection-section').scrollIntoView({behavior: 'smooth'})" class="magnetic-btn px-8 md:px-10 py-4 md:py-5 bg-primary text-on-primary rounded-full font-bold text-base md:text-lg shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_50px_rgba(175,155,109,0.3)] hover:scale-105 hover:bg-primary-dim transition-all duration-500 pointer-events-auto">
                     Kollektion entdecken
                 </button>
-                <button class="magnetic-btn px-8 md:px-10 py-4 md:py-5 border border-outline-variant text-on-background rounded-full font-medium text-base md:text-lg hover:bg-surface-container-high hover:scale-105 transition-all duration-500 pointer-events-auto">
+                <button class="magnetic-btn px-8 md:px-10 py-4 md:py-5 border border-outline text-on-background rounded-full font-medium text-base md:text-lg hover:bg-surface-container-high hover:scale-105 transition-all duration-500 pointer-events-auto">
                     Design-Philosophie
                 </button>
             </div>
         </div>
     </div>
 </div>
-<section id="collection-section" class="px-4 md:px-12 py-20 md:py-32 bg-surface-container-lowest">
+<section id="collection-section" class="px-4 md:px-12 py-20 md:py-32 bg-surface-container-low">
 <div class="max-w-7xl mx-auto">
 <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 reveal-on-scroll">
 <div class="max-w-xl">
@@ -226,13 +206,11 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
 <div class="md:col-span-8 group cursor-pointer reveal-on-scroll" style="transition-delay: 100ms;">
-<div class="relative rounded-2xl overflow-hidden bg-surface-container mb-8 border border-white/5 shadow-2xl hover-lift bg-background">
-<!-- Off Image -->
+<div class="relative rounded-[2rem] overflow-hidden bg-white mb-8 border border-black/5 shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover-lift">
 <img alt="Myzelia High Climb 3er Bundle Off" class="w-full h-auto object-contain transition-all duration-1000 group-hover:scale-105 opacity-100 group-hover:opacity-0" src="3er-off.jpg"/>
-<!-- On Image (fades in on hover) -->
 <img alt="Myzelia High Climb 3er Bundle On" class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-0 group-hover:opacity-100" src="3er-on.jpg"/>
 <div class="absolute top-10 left-10">
-<span class="px-6 py-3 bg-surface-container-high/90 text-on-background backdrop-blur-xl rounded-full text-xs font-bold uppercase tracking-[0.2em] shadow-xl border border-tertiary/30 animate-[glow-pulse_3s_infinite]">Bestseller</span>
+<span class="px-6 py-3 bg-white/90 text-tertiary backdrop-blur-xl rounded-full text-xs font-bold uppercase tracking-[0.2em] shadow-lg border border-tertiary/20">Bestseller</span>
 </div>
 </div>
 <div class="transform group-hover:translate-x-4 transition-transform duration-700 flex flex-col items-start gap-4">
@@ -241,25 +219,25 @@
 <p class="text-on-surface-variant text-lg">Fließende, pilzförmige Silhouetten, die sich der natürlichen Bewegung anpassen.</p>
 <p class="text-2xl font-bold text-tertiary mt-2">169 €</p>
 </div>
-<button onclick="addToCart('Myzelia High Climb (3er Bundle)', 169)" class="magnetic-btn px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-lg hover:shadow-[0_0_20px_rgba(197,179,126,0.3)] hover:scale-105 hover:bg-primary-dim transition-all">In den Warenkorb</button>
+<button onclick="addToCart('Myzelia High Climb (3er Bundle)', 169)" class="magnetic-btn px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-lg hover:shadow-[0_0_20px_rgba(175,155,109,0.3)] hover:scale-105 hover:bg-primary-dim transition-all">In den Warenkorb</button>
 </div>
 </div>
 <div class="md:col-span-4 flex flex-col gap-12">
 <div class="group cursor-pointer reveal-on-scroll" style="transition-delay: 200ms;">
-<div class="h-[300px] rounded-2xl overflow-hidden bg-surface-container mb-6 border border-white/5 shadow-xl hover-lift">
-<img alt="Mushroom cat step detail" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] grayscale-[60%] brightness-[0.55] group-hover:grayscale-0 group-hover:brightness-[0.9]" src="https://lh3.googleusercontent.com/aida/ADBb0uj_nMD7dpBU4HkEO3VB6o30bs7jMMlLPTikvPyapjlT5AA1CH56lIg9fwWDjw_gZpqtMuS7JiQ4ZOX50FimZgciwDCt4b6RwPtEJN7IrbBKupS-ouhl1A06gRDLQJuZXWWpASuBVzQl3xFlJiY55L63E7GiM0Qn8FXwFqlhl1kD2k_0EW1tBpOg75VyCoWdtyV8-GyXj6VKnoQLeF17M8wKdNza3KsD4m4_hF9OPPs47VLQMZew7yerpQ5taP1XsLZFEO7RM0m2LA"/>
+<div class="h-[300px] rounded-[2rem] overflow-hidden bg-white mb-6 border border-black/5 shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover-lift">
+<img alt="Mushroom cat step detail" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] brightness-[0.95] group-hover:brightness-[1]" src="https://lh3.googleusercontent.com/aida/ADBb0uj_nMD7dpBU4HkEO3VB6o30bs7jMMlLPTikvPyapjlT5AA1CH56lIg9fwWDjw_gZpqtMuS7JiQ4ZOX50FimZgciwDCt4b6RwPtEJN7IrbBKupS-ouhl1A06gRDLQJuZXWWpASuBVzQl3xFlJiY55L63E7GiM0Qn8FXwFqlhl1kD2k_0EW1tBpOg75VyCoWdtyV8-GyXj6VKnoQLeF17M8wKdNza3KsD4m4_hF9OPPs47VLQMZew7yerpQ5taP1XsLZFEO7RM0m2LA"/>
 </div>
 <h3 class="text-2xl font-headline italic text-on-background group-hover:translate-x-3 transition-transform duration-500">Sandstone Essence</h3>
 <p class="text-lg font-bold text-tertiary mt-1">69 €</p>
-<button onclick="addToCart('Sandstone Essence', 69)" class="mt-4 px-5 py-2 bg-primary/80 border border-white/10 text-on-primary rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
+<button onclick="addToCart('Sandstone Essence', 69)" class="mt-4 px-5 py-2 bg-secondary border border-black/5 text-on-background rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
 </div>
 <div class="group cursor-pointer reveal-on-scroll" style="transition-delay: 300ms;">
-<div class="h-[300px] rounded-2xl overflow-hidden bg-surface-container mb-6 border border-white/5 shadow-xl hover-lift">
-<img alt="Illuminated mushroom cat step" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] grayscale-[50%] brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-[0.95]" src="https://lh3.googleusercontent.com/aida/ADBb0uhtKIq0YjbObNswU7eyphG4l2fgxPn2wDkiSqD1K2odh7fwfY1YkBeZqIhPrBlQRiNOVIIUXdYB1U-VpcDwOKDssGxX3LifQ5daNXCxsAE0aI9043INwiP4jhsasxncps3TJuBzESFv-K0sg5k6-JZSGOPBkxCgoW8-y8h1WjcmzDCrHjm_6ssIB02iCuJpUMTR3MPCJKtgYs893ESyGFr8aOKYOSZHBZZYIRUI13VBQfu7aMraBoN0pBUvhrTmCW1y28XwGJO_LA"/>
+<div class="h-[300px] rounded-[2rem] overflow-hidden bg-white mb-6 border border-black/5 shadow-[0_30px_60px_rgba(0,0,0,0.05)] hover-lift">
+<img alt="Illuminated mushroom cat step" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] brightness-[0.95] group-hover:brightness-[1]" src="https://lh3.googleusercontent.com/aida/ADBb0uhtKIq0YjbObNswU7eyphG4l2fgxPn2wDkiSqD1K2odh7fwfY1YkBeZqIhPrBlQRiNOVIIUXdYB1U-VpcDwOKDssGxX3LifQ5daNXCxsAE0aI9043INwiP4jhsasxncps3TJuBzESFv-K0sg5k6-JZSGOPBkxCgoW8-y8h1WjcmzDCrHjm_6ssIB02iCuJpUMTR3MPCJKtgYs893ESyGFr8aOKYOSZHBZZYIRUI13VBQfu7aMraBoN0pBUvhrTmCW1y28XwGJO_LA"/>
 </div>
 <h3 class="text-2xl font-headline italic text-on-background group-hover:translate-x-3 transition-transform duration-500">Glow Driftwood</h3>
 <p class="text-lg font-bold text-tertiary mt-1">69 €</p>
-<button onclick="addToCart('Glow Driftwood', 69)" class="mt-4 px-5 py-2 bg-primary/80 border border-white/10 text-on-primary rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
+<button onclick="addToCart('Glow Driftwood', 69)" class="mt-4 px-5 py-2 bg-secondary border border-black/5 text-on-background rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
 </div>
 </div>
 </div>
@@ -267,18 +245,18 @@
 </section>
 
 <!-- Interactive Video Slider Section -->
-<section class="py-32 px-6 md:px-12 bg-surface-container-lowest relative overflow-hidden border-t border-b border-white/5">
+<section class="py-32 px-6 md:px-12 bg-surface-container-low relative overflow-hidden border-t border-b border-black/5">
     <div class="max-w-5xl mx-auto reveal-on-scroll">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-headline italic mb-6 text-on-background glint-text">Finde deine Farbe</h2>
             <p class="text-xl text-on-surface-variant max-w-2xl mx-auto">Ziehe den goldenen Regler, um fließend durch die verschiedenen Farb- und Materialvarianten unserer Wandstufen zu navigieren.</p>
         </div>
         
-        <div class="relative rounded-3xl overflow-hidden bg-background shadow-2xl border border-white/10 mb-12">
+        <div class="relative rounded-[3rem] overflow-hidden bg-black shadow-2xl border border-black/5 mb-12">
             <video id="color-video" class="w-full h-auto object-cover" muted playsinline preload="auto" src="try.mp4"></video>
         </div>
         
-        <div class="max-w-2xl mx-auto w-full relative bg-surface-container p-6 md:p-8 rounded-3xl border border-white/5 shadow-xl">
+        <div class="max-w-2xl mx-auto w-full relative bg-surface-container p-6 md:p-8 rounded-3xl border border-black/5 shadow-xl">
             <div class="flex justify-between text-[10px] md:text-sm text-on-surface-variant font-bold uppercase tracking-widest mb-6 px-1">
                 <span>Variante 1</span>
                 <span>Variante 2</span>
@@ -287,11 +265,11 @@
             input[type=range].slider-thumb-premium::-webkit-slider-thumb {
               -webkit-appearance: none;
               appearance: none;
-              width: 32px; /* Größer für Mobilgeräte */
+              width: 32px;
               height: 32px;
               border-radius: 50%;
-              background: #c5b37e;
-              box-shadow: 0 0 20px rgba(197, 179, 126, 0.6);
+              background: #af9b6d;
+              box-shadow: 0 0 20px rgba(175, 155, 109, 0.6);
               cursor: pointer;
               transition: transform 0.2s;
             }
@@ -305,7 +283,7 @@
                 transform: scale(1.3);
             }
             </style>
-            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none bg-background border border-white/10 h-2 rounded-full outline-none slider-thumb-premium transition-all" />
+            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none bg-surface-container-high border border-black/10 h-2 rounded-full outline-none slider-thumb-premium transition-all" />
         </div>
     </div>
 </section>
@@ -313,11 +291,11 @@
 <section class="py-40 px-6 md:px-12 bg-background relative overflow-hidden">
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
 <div class="relative reveal-on-scroll">
-<div class="w-full aspect-square rounded-full overflow-hidden border-[1px] border-tertiary/20 p-8 shadow-[0_0_150px_rgba(0,0,0,0.8)] relative group">
+<div class="w-full aspect-square rounded-full overflow-hidden border-[1px] border-tertiary/20 p-8 shadow-[0_0_150px_rgba(0,0,0,0.05)] relative group">
 <img alt="3D printing mushroom structure" class="w-full h-full object-cover rounded-full grayscale-[100%] opacity-50 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[2s] parallax-layer" data-speed="-0.08" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrI3dlR672N5Fs4I7QH4-DWkQVCH_G_MdxmscjtPLnTN1vcvm4vRR9OGFmhVCcCC8ZXJfBp8OFoCSQjyy32IJfjt59impZyLhc3J8tNT4LrD3u8jcLcNLid_W3meYq05W9GDfQtBrzPBZhHH1_2zUA8SOKyZlOzj-5oF5v_bHC_O8eXiQauXYY3aCJHw_7WFUA7UvL_WEP62fmZ28J_j22v9n8IxvY3Rp5QidAhz9DsObFQjAVeKxoJ27X9bktpgB7W4kRTDVUsxI"/>
 <div class="absolute inset-0 bg-gradient-to-tr from-tertiary/10 to-transparent mix-blend-overlay"></div>
 </div>
-<div class="absolute -bottom-10 -right-10 bg-surface-container-highest/90 backdrop-blur-3xl p-10 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] max-w-sm border border-white/10 animate-[float_6s_ease-in-out_infinite]">
+<div class="absolute -bottom-10 -right-10 bg-surface-container-highest/90 backdrop-blur-3xl p-10 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.1)] max-w-sm border border-black/5 animate-[float_6s_ease-in-out_infinite]">
 <span class="material-symbols-outlined text-5xl text-tertiary mb-6 block breathe-glow">precision_manufacturing</span>
 <h4 class="text-xl font-headline font-bold mb-3 text-on-background">Präzision aus Deutschland</h4>
 <p class="text-on-surface-variant leading-relaxed">Jede pilzförmige Stufe wird in 14-stündiger Feinarbeit 3D-gedruckt und von Hand veredelt.</p>
@@ -358,7 +336,7 @@
 <p class="text-xl text-on-surface-variant">Innovation steckt im Detail der Myzelia-Form. Aura Feline Produkte sind intelligent vernetzt und auf Langlebigkeit ausgelegt.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 stagger-reveal reveal-on-scroll">
-<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] transition-all duration-700 border border-black/5 cursor-default relative overflow-hidden">
 <div class="w-20 h-20 md:w-24 md:h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-8 md:mb-10 group-hover:scale-110 group-hover:rotate-[15deg] transition-all duration-700">
 <span class="material-symbols-outlined text-4xl md:text-5xl text-tertiary group-hover:text-on-primary">fitness_center</span>
 </div>
@@ -367,7 +345,7 @@
                         Jede Wandstufe hat einen Halter aus Edelstahl wodurch sie für Katzen mit bis zu 11kg geeignet sind
                     </p>
 </div>
-<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] transition-all duration-700 border border-black/5 cursor-default relative overflow-hidden">
 <div class="w-20 h-20 md:w-24 md:h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-8 md:mb-10 group-hover:scale-110 transition-all duration-700 relative overflow-hidden">
 <span class="material-symbols-outlined text-4xl md:text-5xl text-tertiary group-hover:text-on-primary breathe-glow">light_mode</span>
 <div class="absolute inset-0 bg-tertiary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -377,7 +355,7 @@
                         Sanfte Ambientebeleuchtung aus dem Pilzkopf, steuerbar per Aura App.
                     </p>
 </div>
-<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="bg-surface-container-high p-8 md:p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] transition-all duration-700 border border-black/5 cursor-default relative overflow-hidden">
 <div class="w-20 h-20 md:w-24 md:h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-8 md:mb-10 group-hover:scale-110 transition-all duration-700">
 <span class="material-symbols-outlined text-4xl md:text-5xl text-tertiary group-hover:text-on-primary breathe-glow">battery_full</span>
 </div>
@@ -390,7 +368,7 @@
 </div>
 </section>
 </main>
-<footer class="w-full py-32 bg-background border-t border-white/5 relative z-10">
+<footer class="w-full py-32 bg-surface-container-high border-t border-black/5 relative z-10">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-20 px-6 md:px-12 max-w-7xl mx-auto font-body text-xs tracking-[0.25em] uppercase">
 <div class="flex flex-col gap-10 reveal-on-scroll">
 <span class="font-headline text-4xl italic text-tertiary glint-text">Aura Feline</span>
@@ -403,19 +381,20 @@
 </div>
 <div class="grid grid-cols-2 gap-12 reveal-on-scroll" style="transition-delay: 200ms;">
 <div class="flex flex-col gap-6">
-<p class="font-bold text-on-background mb-4">Connect</p>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Instagram</a>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Pinterest</a>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Facebook</a>
+<p class="font-bold text-tertiary mb-4">Connect</p>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="#">Instagram</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="#">Pinterest</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="#">Facebook</a>
 </div>
 <div class="flex flex-col gap-6">
-<p class="font-bold text-on-background mb-4">Legal</p>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="impressum.html">Impressum</a>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="datenschutz.html">Datenschutz</a>
-<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="agb.html">AGB</a>
-    </div>
+<p class="font-bold text-tertiary mb-4">Legal</p>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="impressum.html">Impressum</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="datenschutz.html">Datenschutz</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block normal-case tracking-normal" href="agb.html">AGB</a>
+</div>
+</div>
+</div>
 </footer>
-</main>
 <script>
     // Create Mycelium Background Particles
     const particleContainer = document.getElementById('particle-container');
