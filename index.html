@@ -164,30 +164,29 @@
 <!-- Scroll Video Header -->
 <div id="video-scroll-container" class="relative w-full h-[400vh]">
     <div class="sticky top-0 w-full h-screen overflow-hidden bg-background">
-        <video id="hero-scroll-video" src="shroom.mp4" muted playsinline preload="auto" tabindex="-1" class="w-full h-full object-cover opacity-90 transition-opacity duration-1000"></video>
-        <div class="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none z-10"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-10"></div>
-        <div id="video-vignette-sides" class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background opacity-40 pointer-events-none z-10"></div>
+        <video id="hero-scroll-video" src="shroom.mp4" muted playsinline preload="auto" tabindex="-1" class="w-full h-full object-cover"></video>
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none pb-[15vh]">
-             <span id="scroll-prompt" class="text-tertiary/70 font-body uppercase tracking-[0.3em] text-xs animate-bounce opacity-0 transition-opacity duration-1000 text-center glint-text">Scroll Down <br><span class="material-symbols-outlined mt-2 text-tertiary">arrow_downward</span></span>
+             <span id="scroll-prompt" class="text-white/80 font-body uppercase tracking-[0.3em] text-xs animate-bounce opacity-0 transition-opacity duration-1000 text-center">Scroll Down <br><span class="material-symbols-outlined mt-2">arrow_downward</span></span>
         </div>
 
         <!-- Hero Overlay (appears at the end) -->
         <div id="hero-overlay" class="absolute left-6 sm:left-12 md:left-24 top-1/2 z-20 w-[calc(100%-3rem)] md:w-full max-w-2xl transition-all duration-1000 ease-out pointer-events-none" style="opacity: 0; transform: translateY(calc(-50% + 40px));">
-            <span class="label-md uppercase tracking-[0.5em] text-tertiary mb-4 md:mb-6 block font-bold text-xs md:text-sm">Skulptur für den Raum</span>
-            <h1 class="text-3xl sm:text-5xl md:text-[5.5rem] font-headline leading-[0.95] text-on-background mb-6 md:mb-8 tracking-tighter italic glint-text glint-outline">
+            <div class="bg-black/30 backdrop-blur-sm rounded-3xl p-6 md:p-10 -mx-4 md:-mx-6">
+            <span class="label-md uppercase tracking-[0.5em] text-primary mb-4 md:mb-6 block font-bold text-xs md:text-sm">Skulptur für den Raum</span>
+            <h1 class="text-3xl sm:text-5xl md:text-[5.5rem] font-headline leading-[0.95] text-white mb-6 md:mb-8 tracking-tighter italic" style="text-shadow: 0 2px 20px rgba(0,0,0,0.4);">
                 Wenn Design die <br/> Natur berührt.
             </h1>
-            <p class="text-lg md:text-xl text-on-surface-variant mb-10 md:mb-12 max-w-lg leading-relaxed">
+            <p class="text-base md:text-lg text-white/80 mb-10 md:mb-12 max-w-lg leading-relaxed">
                 Entdecken Sie die Myzelia-Serie. Organische Katzenstufen in Pilzform, inspiriert von der Eleganz des Waldes und gefertigt mit modernster Präzision.
             </p>
             <div class="flex flex-wrap items-center gap-4 md:gap-6">
                 <button onclick="document.getElementById('collection-section').scrollIntoView({behavior: 'smooth'})" class="magnetic-btn px-8 md:px-10 py-4 md:py-5 bg-primary text-on-primary rounded-full font-bold text-base md:text-lg shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_50px_rgba(175,155,109,0.3)] hover:scale-105 hover:bg-primary-dim transition-all duration-500 pointer-events-auto">
                     Kollektion entdecken
                 </button>
-                <button class="magnetic-btn px-8 md:px-10 py-4 md:py-5 border border-outline text-on-background rounded-full font-medium text-base md:text-lg hover:bg-surface-container-high hover:scale-105 transition-all duration-500 pointer-events-auto">
+                <button class="magnetic-btn px-8 md:px-10 py-4 md:py-5 border border-white/50 text-white rounded-full font-medium text-base md:text-lg hover:bg-white/20 hover:scale-105 transition-all duration-500 pointer-events-auto">
                     Design-Philosophie
                 </button>
+            </div>
             </div>
         </div>
     </div>
