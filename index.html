@@ -280,7 +280,7 @@
                 </div>
                 <!-- Topas -->
                 <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="setSliderTo(100)">
-                    <div id="swatch-3" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
+                    <div id="swatch-topas" class="w-10 h-10 rounded-full shadow-lg transition-all duration-300 ring-2 ring-offset-2 ring-offset-surface-container ring-transparent group-hover:scale-110" style="background: #c8860a;"></div>
                     <span class="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider">Topas</span>
                 </div>
             </div>
@@ -306,59 +306,9 @@
             input[type=range].slider-thumb-premium::-webkit-slider-thumb:hover {
                 transform: scale(1.25);
             }
-            #color-slider {
-                background: linear-gradient(to right, #111 0%, #3d9970 12%, #2b6ce8 37%, #c0392b 62%, #c8860a 100%) !important;
-                border: none !important;
-                height: 8px;
-            }
             </style>
             <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none rounded-full outline-none slider-thumb-premium transition-all" />
-            <script>
-            function setSliderTo(val) {
-                const slider = document.getElementById('color-slider');
-                if (!slider) return;
-                slider.value = val;
-                slider.dispatchEvent(new Event('input'));
-                updateSwatches5(val);
-            }
-            function updateSwatches5(val) {
-                const v = parseInt(val);
-                const swatches = [
-                    document.getElementById('swatch-off'),
-                    document.getElementById('swatch-0'),
-                    document.getElementById('swatch-1'),
-                    document.getElementById('swatch-2'),
-                    document.getElementById('swatch-3'),
-                ];
-                // Positions matching the actual video color segments
-                const positions = [0, 12, 37, 62, 100];
-                let closest = 0;
-                let minDist = Math.abs(v - positions[0]);
-                for (let i = 1; i < positions.length; i++) {
-                    const d = Math.abs(v - positions[i]);
-                    if (d < minDist) { minDist = d; closest = i; }
-                }
-                swatches.forEach((s, i) => {
-                    if (!s) return;
-                    if (i === closest) {
-                        s.classList.add('ring-tertiary');
-                        s.classList.remove('ring-transparent');
-                        s.style.transform = 'scale(1.15)';
-                    } else {
-                        s.classList.remove('ring-tertiary');
-                        s.classList.add('ring-transparent');
-                        s.style.transform = '';
-                    }
-                });
-            }
-            (function() {
-                const slider = document.getElementById('color-slider');
-                if (slider) {
-                    slider.addEventListener('input', function() { updateSwatches5(this.value); });
-                    updateSwatches5(slider.value);
-                }
-            })();
-            </script>
+        </div>
         </div>
     </div>
 </section>
@@ -824,13 +774,57 @@
     const colorVideo = document.getElementById('color-video');
     const colorSlider = document.getElementById('color-slider');
 
+    // UI Swatch Feedback Logic
+    function updateSwatchesUI(val) {
+        const v = parseInt(val);
+        const swms = [
+            {id: 'swatch-off', pos: 0},
+            {id: 'swatch-0', pos: 12},
+            {id: 'swatch-1', pos: 37},
+            {id: 'swatch-2', pos: 62},
+            {id: 'swatch-topas', pos: 100}
+        ];
+        
+        // Find closest point
+        let closestIdx = 0;
+        let minDist = Math.abs(v - swms[0].pos);
+        for (let i = 1; i < swms.length; i++) {
+            const d = Math.abs(v - swms[i].pos);
+            if (d < minDist) { minDist = d; closestIdx = i; }
+        }
+        
+        swms.forEach((sm, i) => {
+            const el = document.getElementById(sm.id);
+            if (!el) return;
+            if (i === closestIdx) {
+                el.classList.add('ring-tertiary');
+                el.classList.remove('ring-transparent');
+                el.style.transform = 'scale(1.15)';
+            } else {
+                el.classList.remove('ring-tertiary');
+                el.classList.add('ring-transparent');
+                el.style.transform = '';
+            }
+        });
+    }
+
+    // Global jump function
+    window.setSliderTo = function(val) {
+        if (!colorSlider) return;
+        colorSlider.value = val;
+        // Trigger both the model progress and the UI response
+        targetColorProgress = val / 100;
+        updateSwatchesUI(val);
+        // Dispatch event for any other listeners
+        colorSlider.dispatchEvent(new Event('input'));
+    };
+
     if (colorVideo && colorSlider) {
-        // Initialisierung des Start-Frames (2.43s)
+        // Initial setup
         const setInitialFrame = () => { colorVideo.currentTime = 2.43; };
         if (colorVideo.readyState >= 1) { setInitialFrame(); } 
         else { colorVideo.addEventListener('loadedmetadata', setInitialFrame); }
 
-        // Variablen für das glatte Scrubbing (Lerp)
         let targetColorProgress = 0;
         let smoothColorProgress = 0;
         let isColorVideoSeeking = false;
@@ -840,29 +834,29 @@
 
         colorSlider.addEventListener('input', (e) => {
             targetColorProgress = e.target.value / 100;
+            updateSwatchesUI(e.target.value);
         });
+
+        // First UI call to show the current active state (Off = 0)
+        updateSwatchesUI(colorSlider.value);
 
         function renderColorScrubbing() {
             let duration = colorVideo.duration;
             if (colorVideo && !isNaN(duration) && isFinite(duration)) {
-                // Etwas elastischerer Faktor für das Farbrad
-                smoothColorProgress += (targetColorProgress - smoothColorProgress) * 0.065;
+                // Sharper lerp factor (0.12) for more 'springy' feel
+                smoothColorProgress += (targetColorProgress - smoothColorProgress) * 0.12;
 
                 const targetTime = colorStartTime + smoothColorProgress * (duration - colorStartTime);
 
-                // Erhöhter Puffer (0.04) um Stottern bei niedriger Bitrate zu vermeiden
-                if (!isColorVideoSeeking && Math.abs(colorVideo.currentTime - targetTime) > 0.04) {
+                if (!isColorVideoSeeking && Math.abs(colorVideo.currentTime - targetTime) > 0.03) {
                     isColorVideoSeeking = true;
                     colorVideo.currentTime = targetTime;
                 }
             }
             requestAnimationFrame(renderColorScrubbing);
         }
-        
-        // Starte die Animationsschleife
         requestAnimationFrame(renderColorScrubbing);
 
-        // Mobile Initialisierung (Autoplay-Richtlinien)
         const initializeVideo = () => {
              if (colorVideo.paused) { colorVideo.play().then(() => colorVideo.pause()).catch(() => {}); }
              document.removeEventListener('click', initializeVideo);
