@@ -764,58 +764,53 @@
     const colorSlider = document.getElementById('color-slider');
 
     if (colorVideo && colorSlider) {
-        // Setze das initiale Frame auf 2.43s
-        const setInitialFrame = () => {
-             colorVideo.currentTime = 2.43;
-        };
-        if (colorVideo.readyState >= 1) {
-             setInitialFrame();
-        } else {
-             colorVideo.addEventListener('loadedmetadata', setInitialFrame);
-        }
+        // Initialisierung des Start-Frames (2.43s)
+        const setInitialFrame = () => { colorVideo.currentTime = 2.43; };
+        if (colorVideo.readyState >= 1) { setInitialFrame(); } 
+        else { colorVideo.addEventListener('loadedmetadata', setInitialFrame); }
 
-        // Initialsierung für Mobile Geräte (Autoplay-Richtlinien)
+        // Variablen für das glatte Scrubbing (Lerp)
+        let targetColorProgress = 0;
+        let smoothColorProgress = 0;
+        let isColorVideoSeeking = false;
+        const colorStartTime = 2.43;
+
+        colorVideo.addEventListener('seeked', () => { isColorVideoSeeking = false; });
+
+        colorSlider.addEventListener('input', (e) => {
+            targetColorProgress = e.target.value / 100;
+        });
+
+        function renderColorScrubbing() {
+            let duration = colorVideo.duration;
+            if (colorVideo && !isNaN(duration) && isFinite(duration)) {
+                // Glatte Annäherung an den Zielwert (Lerp)
+                smoothColorProgress += (targetColorProgress - smoothColorProgress) * 0.08;
+
+                // Berechne die Zielzeit basierend auf dem 2.43s Start-Offset
+                const targetTime = colorStartTime + smoothColorProgress * (duration - colorStartTime);
+
+                // Nur updaten, wenn der Browser bereit ist und die Zeitdifferenz spürbar ist
+                if (!isColorVideoSeeking && Math.abs(colorVideo.currentTime - targetTime) > 0.02) {
+                    isColorVideoSeeking = true;
+                    colorVideo.currentTime = targetTime;
+                }
+            }
+            requestAnimationFrame(renderColorScrubbing);
+        }
+        
+        // Starte die Animationsschleife
+        requestAnimationFrame(renderColorScrubbing);
+
+        // Mobile Initialisierung (Autoplay-Richtlinien)
         const initializeVideo = () => {
-             if (colorVideo.paused) {
-                 colorVideo.play().then(() => {
-                     colorVideo.pause();
-                 }).catch(err => console.log('Autoplay blocked:', err));
-             }
+             if (colorVideo.paused) { colorVideo.play().then(() => colorVideo.pause()).catch(() => {}); }
              document.removeEventListener('click', initializeVideo);
              document.removeEventListener('touchstart', initializeVideo);
         };
         document.addEventListener('click', initializeVideo);
         document.addEventListener('touchstart', initializeVideo);
-
-        // --- DEBUG ELEMENT ---
-        const debugDiv = document.createElement('div');
-        debugDiv.style.cssText = "color: #c5b37e; font-family: monospace; text-align: center; margin-top: 10px; font-size: 14px;";
-        debugDiv.innerText = "Diagnose-Modus aktiv. Bewege den Slider...";
-        colorSlider.parentElement.appendChild(debugDiv);
-
-        colorSlider.addEventListener('input', (e) => {
-            let duration = colorVideo.duration;
-            
-            // Manche Browser (besonders bei lokalen Dateien) haben Probleme, die Dauer sofort zu laden.
-            if (!duration || isNaN(duration) || !isFinite(duration)) {
-                duration = 5; // Fallback: 5 Sekunden
-                debugDiv.innerText = `WARNUNG: Video-Dauer nicht erkannt. Nutze Fallback (5s).`;
-            }
-            
-            const progress = e.target.value / 100;
-            const startTime = 2.43;
-            // Map progress (0-1) to the video time range [2.43s, duration]
-            let targetTime = startTime + progress * (duration - startTime);
-            
-            // Limit targetTime to be within bounds
-            if (targetTime > duration) targetTime = duration;
-            if (targetTime < startTime) targetTime = startTime;
-            
-            colorVideo.currentTime = targetTime;
-            
-            // Zeige Live-Werte auf dem Bildschirm an
-            debugDiv.innerText = `Pos: ${e.target.value}% | Zeit: ${targetTime.toFixed(2)}s / ${duration.toFixed(2)}s | ReadyState: ${colorVideo.readyState}`;
-        });
+    }
     }
 </script>
 
