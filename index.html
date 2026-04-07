@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html class="dark" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR&enable-funding=klarna"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#0f1113",
+                        "surface": "#16191c",
+                        "surface-container": "#1e2226",
+                        "surface-container-high": "#282d33",
+                        "surface-container-highest": "#333940",
+                        "surface-container-low": "#121417",
+                        "surface-container-lowest": "#0b0c0e",
+                        "primary": "#374151",
+                        "primary-dim": "#1f2937",
+                        "on-primary": "#f8fafc",
+                        "secondary": "#4b5563",
+                        "tertiary": "#c5b37e",
+                        "on-background": "#f1f5f9",
+                        "on-surface-variant": "#94a3b8",
+                        "outline-variant": "#334155",
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @keyframes aura-shift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            33% { transform: translate(2%, 5%) scale(1.05); opacity: 0.5; }
+            66% { transform: translate(-2%, 2%) scale(0.95); opacity: 0.4; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+        }
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+            50% { transform: translateY(-40px) translateX(20px); opacity: 0.6; }
+        }
+        @keyframes breathe {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(197, 179, 126, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(197, 179, 126, 0.3); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            @apply bg-background text-on-background antialiased;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .mycelium-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            background: theme('colors.tertiary');
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0.3;
+            animation: float-particle 15s infinite ease-in-out;
+        }
+        .aura-bg {
+            position: fixed;
+            width: 150vw;
+            height: 150vh;
+            top: -25vh;
+            left: -25vw;
+            background: radial-gradient(circle at center, rgba(197, 179, 126, 0.12) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: 0;
+            pointer-events: none;
+            animation: aura-shift 25s ease-in-out infinite;
+            will-change: transform;
+        }
+        .glint-text {
+            text-shadow: 0 0 1px rgba(197, 179, 126, 0.8), 0 0 15px rgba(197, 179, 126, 0.2);
+            position: relative;
+        }
+        .glint-outline {
+            -webkit-text-stroke: 0.5px rgba(197, 179, 126, 0.3);
+        }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .stagger-reveal > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stagger-reveal.active > *:nth-child(1) { transition-delay: 100ms; opacity: 1; transform: translateY(0); }
+        .stagger-reveal.active > *:nth-child(2) { transition-delay: 200ms; opacity: 1; transform: translateY(0); }
+        .stagger-reveal.active > *:nth-child(3) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+        .breathe-glow {
+            animation: breathe 4s ease-in-out infinite;
+        }
+        .parallax-layer {
+            transition: transform 0.4s cubic-bezier(0.1, 0, 0, 1);
+            will-change: transform;
+        }
+        .hover-lift {
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .magnetic-btn {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-tertiary/30 relative">
+
+<!-- Header with Cart Icon -->
+<header class="fixed top-4 left-0 right-0 px-8 z-[60] flex justify-between items-start pointer-events-none">
+    <a href="index.html" class="font-headline italic text-2xl text-tertiary glint-text pointer-events-auto mt-8 hover:scale-105 transition-transform">Aura Feline</a>
+    <button onclick="toggleCart()" class="pointer-events-auto mt-10 w-14 h-14 rounded-full bg-surface-container-highest/80 backdrop-blur-xl border border-white/10 flex items-center justify-center text-on-background hover:text-tertiary hover:scale-105 transition-all shadow-xl relative group">
+        <span class="material-symbols-outlined text-2xl group-hover:-translate-y-1 transition-transform">shopping_bag</span>
+        <span id="cart-count" class="absolute -top-1 -right-1 bg-tertiary text-background text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">0</span>
+    </button>
+</header>
+
+<!-- Shopping Cart Drawer -->
+<div id="cart-overlay" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[70] opacity-0 pointer-events-none transition-opacity duration-500" onclick="toggleCart()"></div>
+<div id="cart-drawer" class="fixed top-0 right-0 w-full max-w-md h-full bg-surface-container-low border-l border-white/10 z-[80] translate-x-full transition-transform duration-500 flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+    <div class="p-6 border-b border-white/5 flex justify-between items-center">
+        <h2 class="text-2xl font-headline italic glint-text">Warenkorb</h2>
+        <button onclick="toggleCart()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+        <!-- Items will be injected here -->
+        <p class="text-on-surface-variant/50 text-center mt-10">Dein Warenkorb ist leer.</p>
+    </div>
+    
+    <div class="p-6 border-t border-white/5 bg-surface mt-auto">
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-on-surface-variant text-lg">Gesamtsumme</span>
+            <span class="text-2xl font-bold text-tertiary" id="cart-total">0 €</span>
+        </div>
+        <div id="paypal-button-container" class="w-full relative z-50"></div>
+    </div>
+</div>
+<div class="aura-bg" id="ambient-aura"></div>
+<div class="mycelium-bg" id="particle-container"></div>
+<canvas class="fixed inset-0 pointer-events-none z-[50] opacity-80" id="glitter-canvas"></canvas>
+<main class="relative z-10">
+
+<!-- Scroll Video Header -->
+<div id="video-scroll-container" class="relative w-full h-[400vh]">
+    <div class="sticky top-0 w-full h-screen overflow-hidden bg-background">
+        <video id="hero-scroll-video" src="shroom.mov" muted playsinline preload="auto" tabindex="-1" class="w-full h-full object-cover opacity-80 mix-blend-lighten"></video>
+        <!-- Dunkle Verläufe (Vignetten) an den Rändern, um das Video sanft in die Seite einzubauen -->
+        <div class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10"></div>
+        <div class="absolute inset-0 bg-background/10 pointer-events-none z-0"></div>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none pb-[15vh]">
+             <span id="scroll-prompt" class="text-tertiary/70 font-body uppercase tracking-[0.3em] text-xs animate-bounce opacity-0 transition-opacity duration-1000 text-center glint-text">Scroll Down <br><span class="material-symbols-outlined mt-2">arrow_downward</span></span>
+        </div>
+
+        <!-- Hero Overlay (appears at the end) -->
+        <div id="hero-overlay" class="absolute left-6 md:left-24 top-1/2 z-20 w-full max-w-2xl transition-all duration-1000 ease-out pointer-events-none" style="opacity: 0; transform: translateY(calc(-50% + 40px));">
+            <span class="label-md uppercase tracking-[0.5em] text-tertiary mb-6 block font-bold text-sm">Skulptur für den Raum</span>
+            <h1 class="text-[3.5rem] md:text-[5.5rem] font-headline leading-[0.95] text-on-background mb-8 tracking-tighter italic glint-text glint-outline">
+                Wenn Design die <br/> Natur berührt.
+            </h1>
+            <p class="text-xl text-on-surface-variant mb-12 max-w-lg leading-relaxed">
+                Entdecken Sie die Myzelia-Serie. Organische Katzenstufen in Pilzform, inspiriert von der Eleganz des Waldes und gefertigt mit modernster Präzision.
+            </p>
+            <div class="flex flex-wrap items-center gap-6">
+                <button onclick="document.getElementById('collection-section').scrollIntoView({behavior: 'smooth'})" class="magnetic-btn px-10 py-5 bg-primary text-on-primary rounded-full font-bold text-lg shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(197,179,126,0.3)] hover:scale-105 hover:bg-primary-dim transition-all duration-500 pointer-events-auto">
+                    Kollektion entdecken
+                </button>
+                <button class="magnetic-btn px-10 py-5 border border-outline-variant text-on-background rounded-full font-medium text-lg hover:bg-surface-container-high hover:scale-105 transition-all duration-500 pointer-events-auto">
+                    Design-Philosophie
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="collection-section" class="px-6 md:px-12 py-32 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 reveal-on-scroll">
+<div class="max-w-xl">
+<h2 class="text-4xl md:text-5xl font-headline mb-6 text-on-background glint-text">Die Myzelia-Kollektion</h2>
+<p class="text-lg text-on-surface-variant">Unsere Schritte sind nicht nur Aufstiegshilfen, sondern organische Erweiterungen Ihrer Wohnlandschaft in skulpturaler Pilzform.</p>
+</div>
+<a class="text-tertiary font-bold flex items-center gap-3 border-b-2 border-tertiary/20 pb-2 group hover:border-tertiary transition-all" href="kollektion.html">
+                    Alle Modelle ansehen
+                    <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+<div class="md:col-span-8 group cursor-pointer reveal-on-scroll" style="transition-delay: 100ms;">
+<div class="relative rounded-2xl overflow-hidden bg-surface-container mb-8 border border-white/5 shadow-2xl hover-lift bg-background">
+<!-- Off Image -->
+<img alt="Myzelia High Climb 3er Bundle Off" class="w-full h-auto object-contain transition-all duration-1000 group-hover:scale-105 opacity-100 group-hover:opacity-0" src="3er-off.jpg"/>
+<!-- On Image (fades in on hover) -->
+<img alt="Myzelia High Climb 3er Bundle On" class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-0 group-hover:opacity-100" src="3er-on.jpg"/>
+<div class="absolute top-10 left-10">
+<span class="px-6 py-3 bg-surface-container-high/90 text-on-background backdrop-blur-xl rounded-full text-xs font-bold uppercase tracking-[0.2em] shadow-xl border border-tertiary/30 animate-[glow-pulse_3s_infinite]">Bestseller</span>
+</div>
+</div>
+<div class="transform group-hover:translate-x-4 transition-transform duration-700 flex flex-col items-start gap-4">
+<div>
+<h3 class="text-3xl font-headline italic mb-2 text-on-background glint-text">Myzelia High Climb (3er Bundle)</h3>
+<p class="text-on-surface-variant text-lg">Fließende, pilzförmige Silhouetten, die sich der natürlichen Bewegung anpassen.</p>
+<p class="text-2xl font-bold text-tertiary mt-2">169 €</p>
+</div>
+<button onclick="addToCart('Myzelia High Climb (3er Bundle)', 169)" class="magnetic-btn px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-lg hover:shadow-[0_0_20px_rgba(197,179,126,0.3)] hover:scale-105 hover:bg-primary-dim transition-all">In den Warenkorb</button>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col gap-12">
+<div class="group cursor-pointer reveal-on-scroll" style="transition-delay: 200ms;">
+<div class="h-[300px] rounded-2xl overflow-hidden bg-surface-container mb-6 border border-white/5 shadow-xl hover-lift">
+<img alt="Mushroom cat step detail" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] grayscale-[60%] brightness-[0.55] group-hover:grayscale-0 group-hover:brightness-[0.9]" src="https://lh3.googleusercontent.com/aida/ADBb0uj_nMD7dpBU4HkEO3VB6o30bs7jMMlLPTikvPyapjlT5AA1CH56lIg9fwWDjw_gZpqtMuS7JiQ4ZOX50FimZgciwDCt4b6RwPtEJN7IrbBKupS-ouhl1A06gRDLQJuZXWWpASuBVzQl3xFlJiY55L63E7GiM0Qn8FXwFqlhl1kD2k_0EW1tBpOg75VyCoWdtyV8-GyXj6VKnoQLeF17M8wKdNza3KsD4m4_hF9OPPs47VLQMZew7yerpQ5taP1XsLZFEO7RM0m2LA"/>
+</div>
+<h3 class="text-2xl font-headline italic text-on-background group-hover:translate-x-3 transition-transform duration-500">Sandstone Essence</h3>
+<p class="text-lg font-bold text-tertiary mt-1">69 €</p>
+<button onclick="addToCart('Sandstone Essence', 69)" class="mt-4 px-5 py-2 bg-primary/80 border border-white/10 text-on-primary rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
+</div>
+<div class="group cursor-pointer reveal-on-scroll" style="transition-delay: 300ms;">
+<div class="h-[300px] rounded-2xl overflow-hidden bg-surface-container mb-6 border border-white/5 shadow-xl hover-lift">
+<img alt="Illuminated mushroom cat step" class="w-full h-full object-cover group-hover:scale-115 transition-transform duration-[2s] grayscale-[50%] brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-[0.95]" src="https://lh3.googleusercontent.com/aida/ADBb0uhtKIq0YjbObNswU7eyphG4l2fgxPn2wDkiSqD1K2odh7fwfY1YkBeZqIhPrBlQRiNOVIIUXdYB1U-VpcDwOKDssGxX3LifQ5daNXCxsAE0aI9043INwiP4jhsasxncps3TJuBzESFv-K0sg5k6-JZSGOPBkxCgoW8-y8h1WjcmzDCrHjm_6ssIB02iCuJpUMTR3MPCJKtgYs893ESyGFr8aOKYOSZHBZZYIRUI13VBQfu7aMraBoN0pBUvhrTmCW1y28XwGJO_LA"/>
+</div>
+<h3 class="text-2xl font-headline italic text-on-background group-hover:translate-x-3 transition-transform duration-500">Glow Driftwood</h3>
+<p class="text-lg font-bold text-tertiary mt-1">69 €</p>
+<button onclick="addToCart('Glow Driftwood', 69)" class="mt-4 px-5 py-2 bg-primary/80 border border-white/10 text-on-primary rounded-full font-medium hover:bg-primary transition-all">In den Warenkorb</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Interactive Video Slider Section -->
+<section class="py-32 px-6 md:px-12 bg-surface-container-lowest relative overflow-hidden border-t border-b border-white/5">
+    <div class="max-w-5xl mx-auto reveal-on-scroll">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-headline italic mb-6 text-on-background glint-text">Finde deine Farbe</h2>
+            <p class="text-xl text-on-surface-variant max-w-2xl mx-auto">Ziehe den goldenen Regler, um fließend durch die verschiedenen Farb- und Materialvarianten unserer Wandstufen zu navigieren.</p>
+        </div>
+        
+        <div class="relative rounded-3xl overflow-hidden bg-background shadow-2xl border border-white/10 mb-12">
+            <video id="color-video" class="w-full h-auto object-cover" muted playsinline preload="auto" src="try.mp4"></video>
+        </div>
+        
+        <div class="max-w-2xl mx-auto w-full relative bg-surface-container p-8 rounded-3xl border border-white/5 shadow-xl">
+            <div class="flex justify-between text-xs text-on-surface-variant font-bold uppercase tracking-widest mb-6">
+                <span>Variante 1</span>
+                <span>Variante 2</span>
+            </div>
+            <style>
+            input[type=range].slider-thumb-premium::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: #c5b37e;
+              box-shadow: 0 0 20px rgba(197, 179, 126, 0.6);
+              cursor: pointer;
+              transition: transform 0.2s;
+            }
+            input[type=range].slider-thumb-premium::-webkit-slider-thumb:hover {
+                transform: scale(1.3);
+            }
+            </style>
+            <input type="range" id="color-slider" min="0" max="100" value="0" class="w-full cursor-pointer appearance-none bg-background border border-white/10 h-2 rounded-full outline-none slider-thumb-premium transition-all" />
+        </div>
+    </div>
+</section>
+
+<section class="py-40 px-6 md:px-12 bg-background relative overflow-hidden">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="relative reveal-on-scroll">
+<div class="w-full aspect-square rounded-full overflow-hidden border-[1px] border-tertiary/20 p-8 shadow-[0_0_150px_rgba(0,0,0,0.8)] relative group">
+<img alt="3D printing mushroom structure" class="w-full h-full object-cover rounded-full grayscale-[100%] opacity-50 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[2s] parallax-layer" data-speed="-0.08" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrI3dlR672N5Fs4I7QH4-DWkQVCH_G_MdxmscjtPLnTN1vcvm4vRR9OGFmhVCcCC8ZXJfBp8OFoCSQjyy32IJfjt59impZyLhc3J8tNT4LrD3u8jcLcNLid_W3meYq05W9GDfQtBrzPBZhHH1_2zUA8SOKyZlOzj-5oF5v_bHC_O8eXiQauXYY3aCJHw_7WFUA7UvL_WEP62fmZ28J_j22v9n8IxvY3Rp5QidAhz9DsObFQjAVeKxoJ27X9bktpgB7W4kRTDVUsxI"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-tertiary/10 to-transparent mix-blend-overlay"></div>
+</div>
+<div class="absolute -bottom-10 -right-10 bg-surface-container-highest/90 backdrop-blur-3xl p-10 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] max-w-sm border border-white/10 animate-[float_6s_ease-in-out_infinite]">
+<span class="material-symbols-outlined text-5xl text-tertiary mb-6 block breathe-glow">precision_manufacturing</span>
+<h4 class="text-xl font-headline font-bold mb-3 text-on-background">Präzision aus Deutschland</h4>
+<p class="text-on-surface-variant leading-relaxed">Jede pilzförmige Stufe wird in 14-stündiger Feinarbeit 3D-gedruckt und von Hand veredelt.</p>
+</div>
+</div>
+<div class="lg:pl-10 reveal-on-scroll" style="transition-delay: 200ms;">
+<h2 class="text-4xl md:text-5xl font-headline mb-10 italic text-on-background glint-text">Meisterhaft 3D-gedruckt in Deutschland</h2>
+<p class="text-xl text-on-surface-variant mb-12 leading-relaxed">
+                    Aura Feline kombiniert innovative Fertigungstechnologie mit traditionellem Handwerk. Wir nutzen biokompatible Polymere für unsere einzigartigen Pilz-Designs, die nicht nur extrem belastbar sind, sondern auch eine haptische Wärme ausstrahlen.
+                </p>
+<ul class="space-y-8">
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 group-hover:scale-115 group-hover:bg-tertiary/20 group-hover:border-tertiary transition-all duration-500">
+<span class="material-symbols-outlined text-tertiary text-xl font-bold">check</span>
+</div>
+<span class="text-xl font-medium text-on-background group-hover:translate-x-2 transition-all duration-500">Nachhaltige biopolymere Materialien</span>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 group-hover:scale-115 group-hover:bg-tertiary/20 group-hover:border-tertiary transition-all duration-500">
+<span class="material-symbols-outlined text-tertiary text-xl font-bold">check</span>
+</div>
+<span class="text-xl font-medium text-on-background group-hover:translate-x-2 transition-all duration-500">Nahtlose, organische Pilz-Oberflächenstruktur</span>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 group-hover:scale-115 group-hover:bg-tertiary/20 group-hover:border-tertiary transition-all duration-500">
+<span class="material-symbols-outlined text-tertiary text-xl font-bold">check</span>
+</div>
+<span class="text-xl font-medium text-on-background group-hover:translate-x-2 transition-all duration-500">Jedes Stück ein Unikat</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="py-40 px-6 md:px-12 bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto">
+<div class="text-center max-w-3xl mx-auto mb-24 reveal-on-scroll">
+<h2 class="text-4xl md:text-5xl font-headline italic mb-8 text-on-background glint-text">Technologie, die man nicht sieht.</h2>
+<p class="text-xl text-on-surface-variant">Innovation steckt im Detail der Myzelia-Form. Aura Feline Produkte sind intelligent vernetzt und auf Langlebigkeit ausgelegt.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10 stagger-reveal reveal-on-scroll">
+<div class="bg-surface-container-high p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="w-24 h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-10 group-hover:scale-110 group-hover:rotate-[15deg] transition-all duration-700">
+<span class="material-symbols-outlined text-5xl text-tertiary group-hover:text-on-primary">fitness_center</span>
+</div>
+<h3 class="text-2xl font-headline italic mb-5 group-hover:text-on-primary group-hover:scale-110 transition-transform duration-500">11kg Tragkraft</h3>
+<p class="text-on-surface-variant group-hover:text-on-primary/80 leading-relaxed text-base">
+                        Jede Wandstufe hat einen Halter aus Edelstahl wodurch sie für Katzen mit bis zu 11kg geeignet sind
+                    </p>
+</div>
+<div class="bg-surface-container-high p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="w-24 h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-10 group-hover:scale-110 transition-all duration-700 relative overflow-hidden">
+<span class="material-symbols-outlined text-5xl text-tertiary group-hover:text-on-primary breathe-glow">light_mode</span>
+<div class="absolute inset-0 bg-tertiary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<h3 class="text-2xl font-headline italic mb-5 group-hover:text-on-primary group-hover:scale-110 transition-transform duration-500">Smart RGB Control</h3>
+<p class="text-on-surface-variant group-hover:text-on-primary/80 leading-relaxed text-base">
+                        Sanfte Ambientebeleuchtung aus dem Pilzkopf, steuerbar per Aura App.
+                    </p>
+</div>
+<div class="bg-surface-container-high p-16 rounded-[2rem] text-center group hover:bg-primary/90 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6)] transition-all duration-700 border border-white/5 cursor-default relative overflow-hidden">
+<div class="w-24 h-24 bg-background/60 rounded-full flex items-center justify-center mx-auto mb-10 group-hover:scale-110 transition-all duration-700">
+<span class="material-symbols-outlined text-5xl text-tertiary group-hover:text-on-primary breathe-glow">battery_full</span>
+</div>
+<h3 class="text-2xl font-headline italic mb-5 group-hover:text-on-primary group-hover:scale-110 transition-transform duration-500">60h Akkulaufzeit</h3>
+<p class="text-on-surface-variant group-hover:text-on-primary/80 leading-relaxed text-base">
+                        Wochenlange Beleuchtung ohne lästige Kabelverbindungen.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full py-32 bg-background border-t border-white/5 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-20 px-6 md:px-12 max-w-7xl mx-auto font-body text-xs tracking-[0.25em] uppercase">
+<div class="flex flex-col gap-10 reveal-on-scroll">
+<span class="font-headline text-4xl italic text-tertiary glint-text">Aura Feline</span>
+<p class="normal-case text-on-surface-variant tracking-normal text-xl font-headline italic leading-relaxed max-w-xs">
+                Nachhaltig gedacht. <br/> Meisterhaft gefertigt. <br/> In organischer Pilzform.
+            </p>
+<p class="text-on-surface-variant/40 mt-12 normal-case tracking-normal text-sm">
+                © Aura Feline. Handgefertigt mit Präzision. Made in Germany.
+            </p>
+</div>
+<div class="grid grid-cols-2 gap-12 reveal-on-scroll" style="transition-delay: 200ms;">
+<div class="flex flex-col gap-6">
+<p class="font-bold text-on-background mb-4">Connect</p>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Instagram</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Pinterest</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="#">Facebook</a>
+</div>
+<div class="flex flex-col gap-6">
+<p class="font-bold text-on-background mb-4">Legal</p>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="impressum.html">Impressum</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="datenschutz.html">Datenschutz</a>
+<a class="text-on-surface-variant hover:text-tertiary transition-all hover:translate-x-2 inline-block" href="agb.html">AGB</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    // Create Mycelium Background Particles
+    const particleContainer = document.getElementById('particle-container');
+    const particleCount = 40;
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        particle.style.animationDuration = `${10 + Math.random() * 15}s`;
+        particleContainer.appendChild(particle);
+    }
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+    document.querySelectorAll('.reveal-on-scroll, .stagger-reveal').forEach(el => observer.observe(el));
+    const aura = document.getElementById('ambient-aura');
+    
+    // Video Scroll Logic setup
+    const scrollVideo = document.getElementById('hero-scroll-video');
+    const scrollContainer = document.getElementById('video-scroll-container');
+    const scrollPrompt = document.getElementById('scroll-prompt');
+    
+    if(scrollVideo) {
+        scrollVideo.load();
+        scrollVideo.addEventListener('loadedmetadata', () => {
+            scrollVideo.pause();
+            setTimeout(() => { if(scrollPrompt) scrollPrompt.style.opacity = '1'; }, 1000);
+        });
+    }
+
+    let targetScrollProgress = 0;
+    let smoothScrollProgress = 0;
+    let isVideoSeeking = false;
+
+    if (scrollVideo) {
+        scrollVideo.addEventListener('seeked', () => {
+            isVideoSeeking = false;
+        });
+    }
+
+    // The continuous loop to smoothly interpolate the video time
+    function renderVideoScroll() {
+        if (scrollContainer && scrollVideo && scrollVideo.readyState >= 1) {
+            // Sehr weicher Lerp-Faktor für ultimative Glätte
+            smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.04;
+            
+            const targetTime = smoothScrollProgress * scrollVideo.duration;
+            if(!Number.isNaN(targetTime)) {
+                // Verhindert Decoder-Stottern: Setze die Zeit nur neu, wenn der Browser mit dem letzten Frame fertig ist
+                // und die Änderung mindestens ~30ms beträgt.
+                if (!isVideoSeeking && Math.abs(scrollVideo.currentTime - targetTime) > 0.03) {
+                    isVideoSeeking = true;
+                    scrollVideo.currentTime = targetTime;
+                }
+            }
+
+            if (scrollPrompt && smoothScrollProgress > 0.02) {
+                scrollPrompt.style.opacity = '0';
+            }
+            
+            // Fade in Hero Text Overlay at the end instead of fading out video
+            const heroOverlay = document.getElementById('hero-overlay');
+            if (heroOverlay) {
+                if (smoothScrollProgress > 0.85) {
+                    heroOverlay.style.opacity = '1';
+                    heroOverlay.style.transform = 'translateY(-50%)';
+                    heroOverlay.style.pointerEvents = 'auto';
+                } else {
+                    heroOverlay.style.opacity = '0';
+                    heroOverlay.style.transform = 'translateY(calc(-50% + 40px))';
+                    heroOverlay.style.pointerEvents = 'none';
+                }
+            }
+        }
+        window.requestAnimationFrame(renderVideoScroll);
+    }
+    // Start smoothing loop
+    window.requestAnimationFrame(renderVideoScroll);
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        
+        // --- Calculate Target Video Progress ---
+        if (scrollContainer && scrollVideo) { 
+            const containerRect = scrollContainer.getBoundingClientRect();
+            const totalScroll = containerRect.height - window.innerHeight;
+            
+            if (containerRect.top <= 0) {
+                let progress = Math.abs(containerRect.top) / totalScroll;
+                targetScrollProgress = Math.max(0, Math.min(1, progress));
+            } else {
+                targetScrollProgress = 0;
+            }
+        }
+        // --- End Target Progress ---
+
+        document.querySelectorAll('.parallax-layer').forEach(layer => {
+            const speed = parseFloat(layer.getAttribute('data-speed')) || 0.1;
+            const yPos = -(scrolled * speed);
+            layer.style.transform = `translateY(${yPos}px)`;
+        });
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach((p, index) => {
+            const depth = index % 3 === 0 ? 0.05 : 0.02;
+            p.style.transform = `translateY(${scrolled * depth}px)`;
+        });
+    });
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const xPercent = (mouseX / window.innerWidth - 0.5) * 30;
+        const yPercent = (mouseY / window.innerHeight - 0.5) * 30;
+        aura.style.transform = `translate(${xPercent}%, ${yPercent}%) scale(1.15)`;
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            const rect = btn.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            const distance = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+            if (distance < 150) {
+                const magneticX = (mouseX - btnCenterX) * 0.2;
+                const magneticY = (mouseY - btnCenterY) * 0.2;
+                btn.style.transform = `translate(${magneticX}px, ${magneticY}px) scale(1.05)`;
+            } else {
+                btn.style.transform = `translate(0, 0) scale(1)`;
+            }
+        });
+    });
+</script>
+<script>
+    (function() {
+        const canvas = document.getElementById('glitter-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const mouse = { x: null, y: null };
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            // Increased density: creating more particles per move (e.g., 6)
+            for (let i = 0; i < 6; i++) {
+                particles.push(new Particle());
+            }
+        });
+        class Particle {
+            constructor() {
+                this.x = mouse.x;
+                this.y = mouse.y;
+                // Wider range of sizes: from almost imperceptible to slightly larger
+                this.size = Math.random() < 0.3 ? Math.random() * 0.5 + 0.1 : Math.random() * 2.8 + 0.5;
+                // Slower initial speed to linger closer to cursor
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                // Varied glitter colors: gold, white, and translucent highlights
+                const colors = ['#c5b37e', '#f8fafc', '#ffffff', '#e2e8f0'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1;
+                // Slower decay for a more dusty, lingering effect
+                this.decay = Math.random() * 0.015 + 0.008;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                // Add a tiny bit of gravity or drift
+                this.speedY += 0.01;
+                this.life -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                // Add glow/bloom to the dust particles
+                ctx.shadowBlur = Math.random() * 12 * this.life;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                // Most are circles, some could be tiny "twinkles" (diamonds)
+                if (Math.random() > 0.9) {
+                    const r = this.size;
+                    ctx.moveTo(this.x, this.y - r * 2);
+                    ctx.lineTo(this.x + r, this.y);
+                    ctx.lineTo(this.x, this.y + r * 2);
+                    ctx.lineTo(this.x - r, this.y);
+                } else {
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                }
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        function animate() {
+            // Using clearRect but could use a slight tail effect if preferred
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
+</script>
+
+<script>
+    // E-Commerce & Shopping Cart state
+    let cart = [];
+    const cartCountEl = document.getElementById('cart-count');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartOverlay = document.getElementById('cart-overlay');
+    let isCartOpen = false;
+
+    // Toggle Shopping Cart Drawer
+    function toggleCart() {
+        isCartOpen = !isCartOpen;
+        if (isCartOpen) {
+            cartDrawer.classList.remove('translate-x-full');
+            cartOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        } else {
+            cartDrawer.classList.add('translate-x-full');
+            cartOverlay.classList.add('opacity-0', 'pointer-events-none');
+        }
+    }
+
+    // Add item to cart
+    function addToCart(name, price) {
+        event.stopPropagation();
+        const item = cart.find(i => i.name === name);
+        if (item) {
+            item.quantity += 1;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+        updateCartUI();
+        if (!isCartOpen) {
+            toggleCart();
+        }
+    }
+
+    // Remove item from cart completely
+    function removeFromCart(name) {
+        cart = cart.filter(i => i.name !== name);
+        updateCartUI();
+    }
+
+    // Modify quantity
+    function changeQuantity(name, delta) {
+        const item = cart.find(i => i.name === name);
+        if (item) {
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                removeFromCart(name);
+            } else {
+                updateCartUI();
+            }
+        }
+    }
+
+    // Update UI elements based on current cart
+    function updateCartUI() {
+        // Update total items count
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountEl.innerText = totalItems;
+        
+        // Update total price
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cartTotalEl.innerText = `${totalPrice} €`;
+
+        // Update items HTML in the drawer
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = '<p class="text-on-surface-variant/50 text-center mt-10">Dein Warenkorb ist leer.</p>';
+        } else {
+            cartItemsEl.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-4 bg-surface rounded-xl p-4 border border-white/5 shadow-md">
+                    <div class="flex-1">
+                        <h4 class="font-headline italic text-on-background leading-tight mb-1 text-sm md:text-base">${item.name}</h4>
+                        <p class="text-tertiary font-bold text-sm">${item.price} €</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-surface-container px-2 py-1.5 rounded-full border border-white/10">
+                        <button onclick="changeQuantity('${item.name}', -1)" class="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-white rounded-full bg-white/5">-</button>
+                        <span class="w-4 text-center font-bold text-sm">${item.quantity}</span>
+                        <button onclick="changeQuantity('${item.name}', 1)" class="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-white rounded-full bg-white/5">+</button>
+                    </div>
+                    <button onclick="removeFromCart('${item.name}')" class="text-red-400/50 hover:text-red-400 p-2 transition-colors">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+    }
+
+    // Initialize PayPal Checkout Buttons
+    try {
+        paypal.Buttons({
+            style: {
+                color:  'gold',
+                shape:  'pill',
+                label:  'checkout',
+                height: 48
+            },
+            createOrder: function(data, actions) {
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                if (totalPrice === 0) {
+                    alert("Warenkorb ist leer!");
+                    return;
+                }
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice.toString()
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Vielen Dank! Die Zahlung wurde erfolgreich abgeschlossen, ' + details.payer.name.given_name + '!');
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+                });
+            }
+        }).render('#paypal-button-container');
+    } catch(err) {
+        console.warn("PayPal konnte nicht geladen werden (z.B. durch Adblocker).");
+    }
+
+    // Interactive Color Slider Video Scrubbing Logic
+    const colorVideo = document.getElementById('color-video');
+    const colorSlider = document.getElementById('color-slider');
+
+    if (colorVideo && colorSlider) {
+        // Setze das initiale Frame auf 2.43s
+        const setInitialFrame = () => {
+             colorVideo.currentTime = 2.43;
+        };
+        if (colorVideo.readyState >= 1) {
+             setInitialFrame();
+        } else {
+             colorVideo.addEventListener('loadedmetadata', setInitialFrame);
+        }
+
+        // Initialsierung für Mobile Geräte (Autoplay-Richtlinien)
+        const initializeVideo = () => {
+             if (colorVideo.paused) {
+                 colorVideo.play().then(() => {
+                     colorVideo.pause();
+                 }).catch(err => console.log('Autoplay blocked:', err));
+             }
+             document.removeEventListener('click', initializeVideo);
+             document.removeEventListener('touchstart', initializeVideo);
+        };
+        document.addEventListener('click', initializeVideo);
+        document.addEventListener('touchstart', initializeVideo);
+
+        // --- DEBUG ELEMENT ---
+        const debugDiv = document.createElement('div');
+        debugDiv.style.cssText = "color: #c5b37e; font-family: monospace; text-align: center; margin-top: 10px; font-size: 14px;";
+        debugDiv.innerText = "Diagnose-Modus aktiv. Bewege den Slider...";
+        colorSlider.parentElement.appendChild(debugDiv);
+
+        colorSlider.addEventListener('input', (e) => {
+            let duration = colorVideo.duration;
+            
+            // Manche Browser (besonders bei lokalen Dateien) haben Probleme, die Dauer sofort zu laden.
+            if (!duration || isNaN(duration) || !isFinite(duration)) {
+                duration = 5; // Fallback: 5 Sekunden
+                debugDiv.innerText = `WARNUNG: Video-Dauer nicht erkannt. Nutze Fallback (5s).`;
+            }
+            
+            const progress = e.target.value / 100;
+            const startTime = 2.43;
+            // Map progress (0-1) to the video time range [2.43s, duration]
+            let targetTime = startTime + progress * (duration - startTime);
+            
+            // Limit targetTime to be within bounds
+            if (targetTime > duration) targetTime = duration;
+            if (targetTime < startTime) targetTime = startTime;
+            
+            colorVideo.currentTime = targetTime;
+            
+            // Zeige Live-Werte auf dem Bildschirm an
+            debugDiv.innerText = `Pos: ${e.target.value}% | Zeit: ${targetTime.toFixed(2)}s / ${duration.toFixed(2)}s | ReadyState: ${colorVideo.readyState}`;
+        });
+    }
+</script>
+
+</body></html>
