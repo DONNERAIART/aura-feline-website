@@ -292,7 +292,7 @@
                 <img id="p1-grün" src="produkt/1/1grün.png" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 1 Grün"/>
                 <img id="p1-rot" src="produkt/1/1rot.jpeg" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 1 Rot"/>
             </div>
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 z-30">
                 <div onclick="setProductLight(1, 'aus', this)" class="swatch-btn active" style="background: #e2e8f0;" title="Aus"></div>
                 <div onclick="setProductLight(1, 'an', this)" class="swatch-btn" style="background: #fef3c7;" title="Warmweiß"></div>
                 <div onclick="setProductLight(1, 'blau', this)" class="swatch-btn" style="background: #abc9e9;" title="Saphir"></div>
@@ -323,7 +323,7 @@
                 <img id="p2-grün" src="produkt/2/2grün.png" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 2 Grün"/>
                 <img id="p2-rot" src="produkt/2/2rot.jpeg" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 2 Rot"/>
             </div>
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 z-30">
                 <div onclick="setProductLight(2, 'aus', this)" class="swatch-btn active" style="background: #e2e8f0;" title="Aus"></div>
                 <div onclick="setProductLight(2, 'an', this)" class="swatch-btn" style="background: #fef3c7;" title="Warmweiß"></div>
                 <div onclick="setProductLight(2, 'blau', this)" class="swatch-btn" style="background: #abc9e9;" title="Saphir"></div>
@@ -354,7 +354,7 @@
                 <img id="p3-grün" src="produkt/3/3grün.png" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 3 Grün"/>
                 <img id="p3-rot" src="produkt/3/3rot.jpeg" class="absolute inset-0 w-full h-full object-contain opacity-0" alt="Myzelia Modul 3 Rot"/>
             </div>
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-3 bg-white/40 backdrop-blur-xl rounded-full border border-white/20 shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 z-30">
                 <div onclick="setProductLight(3, 'aus', this)" class="swatch-btn active" style="background: #e2e8f0;" title="Aus"></div>
                 <div onclick="setProductLight(3, 'an', this)" class="swatch-btn" style="background: #fef3c7;" title="Warmweiß"></div>
                 <div onclick="setProductLight(3, 'blau', this)" class="swatch-btn" style="background: #abc9e9;" title="Saphir"></div>
@@ -893,114 +893,6 @@
 </script>
 
 <script>
-    // Remove item from cart completely
-    function removeFromCart(name) {
-        cart = cart.filter(i => i.name !== name);
-        updateCartUI();
-    }
-
-    // Modify quantity
-    function changeQuantity(name, delta) {
-        const item = cart.find(i => i.name === name);
-        if (item) {
-            item.quantity += delta;
-            if (item.quantity <= 0) {
-                removeFromCart(name);
-            } else {
-                updateCartUI();
-            }
-        }
-    }
-
-    // Update UI elements based on current cart
-    function updateCartUI() {
-        // Update total items count
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCountEl.innerText = totalItems;
-        
-        // Update total price
-        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotalEl.innerText = `${totalPrice} €`;
-
-        // Free Shipping Progress (Threshold 200€)
-        const threshold = 200;
-        const progress = Math.min(100, (totalPrice / threshold) * 100);
-        const remaining = threshold - totalPrice;
-        
-        let shippingHTML = '';
-        if (totalPrice > 0) {
-            shippingHTML = `
-                <div class="mb-6 bg-surface-container p-4 rounded-2xl border border-tertiary/10">
-                    <div class="flex justify-between text-[10px] uppercase tracking-wider font-bold mb-2">
-                        <span>${totalPrice >= threshold ? 'Gratis Versand aktiviert' : `Noch ${remaining} € bis Gratis Versand`}</span>
-                        <span>${Math.round(progress)}%</span>
-                    </div>
-                    <div class="w-full h-1.5 bg-black/5 rounded-full overflow-hidden">
-                        <div class="h-full bg-tertiary transition-all duration-700" style="width: ${progress}%"></div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Update items HTML in the drawer
-        if (cart.length === 0) {
-            cartItemsEl.innerHTML = '<p class="text-on-surface-variant/50 text-center mt-10">Dein Warenkorb ist leer.</p>';
-        } else {
-            cartItemsEl.innerHTML = shippingHTML + cart.map(item => `
-                <div class="flex items-center gap-4 bg-surface rounded-xl p-4 border border-white/5 shadow-md">
-                    <div class="flex-1">
-                        <h4 class="font-headline italic text-on-background leading-tight mb-1 text-sm md:text-base">${item.name}</h4>
-                        <p class="text-tertiary font-bold text-sm">${item.price} €</p>
-                    </div>
-                    <div class="flex items-center gap-2 bg-surface-container px-2 py-1.5 rounded-full border border-white/10">
-                        <button onclick="changeQuantity('${item.name}', -1)" class="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-white rounded-full bg-white/5">-</button>
-                        <span class="w-4 text-center font-bold text-sm">${item.quantity}</span>
-                        <button onclick="changeQuantity('${item.name}', 1)" class="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-white rounded-full bg-white/5">+</button>
-                    </div>
-                    <button onclick="removeFromCart('${item.name}')" class="text-red-400/50 hover:text-red-400 p-2 transition-colors">
-                        <span class="material-symbols-outlined text-sm">delete</span>
-                    </button>
-                </div>
-            `).join('');
-        }
-    }
-
-    // Initialize PayPal Checkout Buttons
-    try {
-        paypal.Buttons({
-            style: {
-                color:  'gold',
-                shape:  'pill',
-                label:  'checkout',
-                height: 48
-            },
-            createOrder: function(data, actions) {
-                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                if (totalPrice === 0) {
-                    alert("Warenkorb ist leer!");
-                    return;
-                }
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: totalPrice.toString()
-                        }
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    alert('Vielen Dank! Die Zahlung wurde erfolgreich abgeschlossen, ' + details.payer.name.given_name + '!');
-                    cart = [];
-                    updateCartUI();
-                    toggleCart();
-                });
-            }
-        }).render('#paypal-button-container');
-    } catch(err) {
-        console.warn("PayPal konnte nicht geladen werden (z.B. durch Adblocker).");
-    }
-
     // Interactive Color Slider Video Scrubbing Logic
     const colorVideo = document.getElementById('color-video');
     const colorSlider = document.getElementById('color-slider');
