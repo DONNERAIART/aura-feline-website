@@ -5,3 +5,9 @@ tmp/
 node_modules/
 .vscode/
 .gemini/
+
+# Videos – diese werden direkt per SFTP auf den Server geladen
+# und NIE über GitHub synchronisiert (zu groß, IONOS versteht LFS nicht)
+*.mp4
+*.mov
+*.webm

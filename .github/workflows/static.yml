@@ -1,37 +1,37 @@
-name: Deploy static content to Pages
+name: Deploy to IONOS
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 🚚 Get latest code
         uses: actions/checkout@v4
+
+      - name: 🚀 Sync Files to IONOS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          lfs: true
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 22
+          protocol: sftp
+          local-dir: ./
+          server-dir: /
+          # WICHTIG: Niemals Dateien löschen die nicht in Git sind!
+          # Die Videos (mp4, mov) liegen direkt auf dem Server und werden
+          # von GitHub Actions NICHT angefasst.
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/*.mp4
+            **/*.mov
+            **/*.webm
