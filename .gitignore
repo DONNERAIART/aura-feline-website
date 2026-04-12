@@ -6,10 +6,9 @@ node_modules/
 .vscode/
 .gemini/
 
-# Videos
-# Wir ignorieren alle groen Videodateien komplett fr Git,
-# damit sie nicht das IONOS-Speicherlimit sprengen.
-# Der Upload der Videos erfolgt stattdessen manuell per SFTP.
+# Videos - grosse Formate ignorieren, MP4 erlauben fuer IONOS Deploy
 *.mov
 *.webm
-*.mp4
+
+# Unsere optimierten Website-Videos werden mit deployed:
+# videos/websiteintro.mp4 (~12MB) und videos/color.mp4 (~14MB)
