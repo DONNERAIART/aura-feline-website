@@ -14,5 +14,4 @@ videos/colorshort.mov
 videos/Timeline 1.mp4.mov
 
 # Die folgenden Videos werden NICHT ignoriert (Deploy Now braucht sie):
-!videos/websiteintro.mp4
-!videos/color.mp4
+*.mp4
