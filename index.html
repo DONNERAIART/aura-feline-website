@@ -944,14 +944,14 @@
 
     if (colorVideo && colorSlider) {
         // Initial setup
-        const setInitialFrame = () => { colorVideo.currentTime = 2.43; };
+        const setInitialFrame = () => { colorVideo.currentTime = 0; };
         if (colorVideo.readyState >= 1) { setInitialFrame(); } 
         else { colorVideo.addEventListener('loadedmetadata', setInitialFrame); }
 
         let targetColorProgress = 0;
         let smoothColorProgress = 0;
         let isColorVideoSeeking = false;
-        const colorStartTime = 2.43;
+        const colorStartTime = 0;
 
         colorVideo.addEventListener('seeked', () => { isColorVideoSeeking = false; });
 
