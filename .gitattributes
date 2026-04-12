@@ -1,3 +1,5 @@
-# Videos werden nicht mehr per Git/LFS verwaltet.
-# Sie werden direkt per SFTP auf den IONOS-Server hochgeladen.
-# Siehe .gitignore
+# Videos werden wieder per Git/LFS verwaltet, um das Deployment zu automatisieren.
+# Der GitHub-Workflow (build) lädt diese nun korrekt zu IONOS hoch.
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text
