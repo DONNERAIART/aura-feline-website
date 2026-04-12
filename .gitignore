@@ -6,9 +6,13 @@ node_modules/
 .vscode/
 .gemini/
 
-# Videos – diese werden direkt per SFTP auf den Server geladen (IONOS 50MB Quota)
-# und NIE über GitHub synchronisiert.
-*.mp4
+# Videos – nur die benötigten Videos werden über Git/Deploy Now deployed.
+# Große Backup-Videos bleiben ignoriert.
 *.mov
 *.webm
-videos/
+videos/colorshort.mov
+videos/Timeline 1.mp4.mov
+
+# Die folgenden Videos werden NICHT ignoriert (Deploy Now braucht sie):
+!videos/shroom.mp4
+!videos/try.mp4
