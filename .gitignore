@@ -6,12 +6,10 @@ node_modules/
 .vscode/
 .gemini/
 
-# Videos – nur die benötigten Videos werden über Git/Deploy Now deployed.
-# Große Backup-Videos bleiben ignoriert.
+# Videos
+# Wir ignorieren alle groen Videodateien komplett fr Git,
+# damit sie nicht das IONOS-Speicherlimit sprengen.
+# Der Upload der Videos erfolgt stattdessen manuell per SFTP.
 *.mov
 *.webm
-videos/colorshort.mov
-videos/Timeline 1.mp4.mov
-
-# Die folgenden Videos werden NICHT ignoriert (Deploy Now braucht sie):
 *.mp4
