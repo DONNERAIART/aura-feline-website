@@ -6,8 +6,8 @@ node_modules/
 .vscode/
 .gemini/
 
-# Videos – diese werden nun über Git LFS synchronisiert
-# (Upload erfolgt automatisch beim Deployment)
-# *.mp4
-# *.mov
-# *.webm
+# Videos – diese werden direkt per SFTP auf den Server geladen (IONOS 50MB Quota)
+# und NIE über GitHub synchronisiert.
+*.mp4
+*.mov
+*.webm

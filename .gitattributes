@@ -1,5 +1,3 @@
-# Videos werden wieder per Git/LFS verwaltet, um das Deployment zu automatisieren.
-# Der GitHub-Workflow (build) lädt diese nun korrekt zu IONOS hoch.
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-*.webm filter=lfs diff=lfs merge=lfs -text
+# Videos werden NICHT per Git/LFS verwaltet (IONOS Limit: 50MB).
+# Upload muss manuell per SFTP erfolgen.
+# Siehe .gitignore
